@@ -22,6 +22,7 @@ loguru = ">=0.6.0"
 python-environ = ">=0.4.54"
 pytesseract = "==0.3.10"
 clip-interrogator= "==0.4.1"
+fire = "*"
 
 [requires]
 python_version = "3.10"

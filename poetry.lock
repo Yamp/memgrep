@@ -22,6 +22,25 @@ test = ["contextlib2", "coverage[toml] (>=4.5)", "hypothesis (>=4.0)", "mock (>=
 trio = ["trio (>=0.16,<0.22)"]
 
 [[package]]
+name = "attrs"
+version = "22.2.0"
+description = "Classes Without Boilerplate"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "attrs-22.2.0-py3-none-any.whl", hash = "sha256:29e95c7f6778868dbd49170f98f8818f78f3dc5e0e37c0b1f474e3561b240836"},
+    {file = "attrs-22.2.0.tar.gz", hash = "sha256:c9227bfc2f01993c03f68db37d1d15c9690188323c067c641f1a35ca58185f99"},
+]
+
+[package.extras]
+cov = ["attrs[tests]", "coverage-enable-subprocess", "coverage[toml] (>=5.3)"]
+dev = ["attrs[docs,tests]"]
+docs = ["furo", "myst-parser", "sphinx", "sphinx-notfound-page", "sphinxcontrib-towncrier", "towncrier", "zope.interface"]
+tests = ["attrs[tests-no-zope]", "zope.interface"]
+tests-no-zope = ["cloudpickle", "cloudpickle", "hypothesis", "hypothesis", "mypy (>=0.971,<0.990)", "mypy (>=0.971,<0.990)", "pympler", "pympler", "pytest (>=4.3.0)", "pytest (>=4.3.0)", "pytest-mypy-plugins", "pytest-mypy-plugins", "pytest-xdist[psutil]", "pytest-xdist[psutil]"]
+
+[[package]]
 name = "certifi"
 version = "2022.12.7"
 description = "Python package for providing Mozilla's CA Bundle."
@@ -44,6 +63,50 @@ files = [
     {file = "colorama-0.4.6-py2.py3-none-any.whl", hash = "sha256:4f1d9991f5acc0ca119f9d443620b77f9d6b33703e51011c16baf57afb285fc6"},
     {file = "colorama-0.4.6.tar.gz", hash = "sha256:08695f5cb7ed6e0531a20572697297273c47b8cae5a63ffc6d6ed5c201be6e44"},
 ]
+
+[[package]]
+name = "fire"
+version = "0.5.0"
+description = "A library for automatically generating command line interfaces."
+category = "main"
+optional = false
+python-versions = "*"
+files = [
+    {file = "fire-0.5.0.tar.gz", hash = "sha256:a6b0d49e98c8963910021f92bba66f65ab440da2982b78eb1bbf95a0a34aacc6"},
+]
+
+[package.dependencies]
+six = "*"
+termcolor = "*"
+
+[[package]]
+name = "fuzzysearch"
+version = "0.7.3"
+description = "fuzzysearch is useful for finding approximate subsequence matches"
+category = "main"
+optional = false
+python-versions = "*"
+files = [
+    {file = "fuzzysearch-0.7.3-cp27-cp27m-macosx_10_9_x86_64.whl", hash = "sha256:1ed619f24303a41e59d33fc01bf959439df40b2bf096d00607eff7e0c5a26290"},
+    {file = "fuzzysearch-0.7.3-cp27-cp27m-win32.whl", hash = "sha256:de93de038e8bd50cfc05beb03d1543f6772ce93b52775ded778d04aa918accf8"},
+    {file = "fuzzysearch-0.7.3-cp27-cp27m-win_amd64.whl", hash = "sha256:93a18d596df2af6419b5f705e5842e4e28752c4abb2a264e1bcdc2f302d7f377"},
+    {file = "fuzzysearch-0.7.3-cp35-cp35m-macosx_10_6_intel.whl", hash = "sha256:751143fb6b1b590e313a8350775c0edef3dc6a46409572f0c2ea0e9f9bea7b2a"},
+    {file = "fuzzysearch-0.7.3-cp35-cp35m-win32.whl", hash = "sha256:3e8f601d612781afb784bc177f7e860b0944ad703be8824d734f6cb2a72589ad"},
+    {file = "fuzzysearch-0.7.3-cp35-cp35m-win_amd64.whl", hash = "sha256:fba65a49444ec8a408f4e9a822ba26de34eb8755713b19d9fc642fe9b610d9ee"},
+    {file = "fuzzysearch-0.7.3-cp36-cp36m-macosx_10_9_x86_64.whl", hash = "sha256:46237a2b70c50ed1d01555af7e8d11c77446243dd3ccc58d6e4c1b76b8008d7b"},
+    {file = "fuzzysearch-0.7.3-cp36-cp36m-win32.whl", hash = "sha256:9f18ff4761bbe2d1efebdbc64041a42f788b27a2191839ebf7fd7c2ac34c55bd"},
+    {file = "fuzzysearch-0.7.3-cp36-cp36m-win_amd64.whl", hash = "sha256:3f60730060de44f534a0b3c33ddc4e06172dd0eea8a025c4da31a7b7aeb1fff2"},
+    {file = "fuzzysearch-0.7.3-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:2e8c6d34b2687779288861ec5b67bdbc9a46659d731417960e281a3d8d713eae"},
+    {file = "fuzzysearch-0.7.3-cp37-cp37m-win32.whl", hash = "sha256:261f65f12dd919e5c8b73da8a70ac4d46fa7a0de639529ffb36cc05b6bb5a6f4"},
+    {file = "fuzzysearch-0.7.3-cp37-cp37m-win_amd64.whl", hash = "sha256:f88c3412f198b0252c6cfc640db636a0e47ad33fe7b6a3de907b77c748c7b1d2"},
+    {file = "fuzzysearch-0.7.3-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:42c518fd174b37bc39ae6737025b7b8efb93b3746ea539d7784ca9718780f2b4"},
+    {file = "fuzzysearch-0.7.3-cp38-cp38-win32.whl", hash = "sha256:bbf3047d3ed3fd80b69d38c7a07fdef5c9738436249586095e27f32397c8ad2e"},
+    {file = "fuzzysearch-0.7.3-cp38-cp38-win_amd64.whl", hash = "sha256:f3def5f55c90300ae1c4f3da830ff3ed8bf7827ace1e3cecff819c9de5f23aa7"},
+    {file = "fuzzysearch-0.7.3.tar.gz", hash = "sha256:d5a1b114ceee50a5e181b2fe1ac1b4371ac8db92142770a48fed49ecbc37ca4c"},
+]
+
+[package.dependencies]
+attrs = ">=19.3"
 
 [[package]]
 name = "h11"
@@ -346,6 +409,18 @@ files = [
 pyasn1 = ">=0.1.3"
 
 [[package]]
+name = "six"
+version = "1.16.0"
+description = "Python 2 and 3 compatibility utilities"
+category = "main"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*"
+files = [
+    {file = "six-1.16.0-py2.py3-none-any.whl", hash = "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"},
+    {file = "six-1.16.0.tar.gz", hash = "sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926"},
+]
+
+[[package]]
 name = "sniffio"
 version = "1.3.0"
 description = "Sniff out which async library your code is running under"
@@ -359,14 +434,14 @@ files = [
 
 [[package]]
 name = "telethon"
-version = "1.26.1"
+version = "1.27.0"
 description = "Full-featured Telegram client library for Python 3"
 category = "main"
 optional = false
 python-versions = ">=3.5"
 files = [
-    {file = "Telethon-1.26.1-py3-none-any.whl", hash = "sha256:3ec7ea04e61e0179dd08b974b609814e1a5298eeda3d68368a34bba754f43aec"},
-    {file = "Telethon-1.26.1.tar.gz", hash = "sha256:d894f6ef2bf2cb119f6413b9f620957503785bab0999694b4bf67dea36f8ee09"},
+    {file = "Telethon-1.27.0-py3-none-any.whl", hash = "sha256:39ae3c3335ddd5acc80e395969f27556df140a73e58e9d3bb45863c766c23a8c"},
+    {file = "Telethon-1.27.0.tar.gz", hash = "sha256:21fb26051adc521a4a00a157e6f4a9e87711940ac3504414f96e66056918ef61"},
 ]
 
 [package.dependencies]
@@ -375,6 +450,21 @@ rsa = "*"
 
 [package.extras]
 cryptg = ["cryptg"]
+
+[[package]]
+name = "termcolor"
+version = "2.2.0"
+description = "ANSI color formatting for output in terminal"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "termcolor-2.2.0-py3-none-any.whl", hash = "sha256:91ddd848e7251200eac969846cbae2dacd7d71c2871e92733289e7e3666f48e7"},
+    {file = "termcolor-2.2.0.tar.gz", hash = "sha256:dfc8ac3f350788f23b2947b3e6cfa5a53b630b612e6cd8965a015a776020b99a"},
+]
+
+[package.extras]
+tests = ["pytest", "pytest-cov"]
 
 [[package]]
 name = "win32-setctime"
@@ -394,4 +484,4 @@ dev = ["black (>=19.3b0)", "pytest (>=4.6.2)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "ae51b5ebac4a81f5e0987d2476a0d30f83ef7213f7ad54716ff5ec46df51852e"
+content-hash = "c6ebf203c89a2ca7a08cc6653b526026da5def799bae4b2f811614d74dd87e0e"
