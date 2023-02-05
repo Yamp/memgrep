@@ -3,3 +3,5 @@
 *.session
 .idea
 *.jpg
+cache/
+venv/

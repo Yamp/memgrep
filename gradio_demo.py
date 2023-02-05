@@ -169,4 +169,6 @@ with gr.Blocks(css=css) as block:
 
 server_name = '0.0.0.0'
 port = 8989
-block.queue(max_size=32,concurrency_count=20).launch(show_api=False, debug=True, show_error=True, port=port, server_name=server, share=False)
+block.queue(max_size=32,
+            concurrency_count=20).launch(show_api=False, debug=True, show_error=True,
+                                         share=True)
