@@ -5,6 +5,8 @@ name = "pypi"
 
 [packages]
 requests = "*"
+torch="==1.13.1+cu117"
+torchvision="==0.14.1+cu117"
 telethon = "==1.16.1"
 loguru = ">=0.6.0"
 python-environ = ">=0.4.54"
