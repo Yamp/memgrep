@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "memgrep"
+version = "0.1.0"
+description = ""
+authors = ["Dmiriy Yampolkiy <yampolskiydv@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
