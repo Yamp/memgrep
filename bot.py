@@ -1,13 +1,9 @@
-import logging
+from pprint import pformat
 
 import environ
 from loguru import logger
 from telethon import TelegramClient
-
-logging.basicConfig(
-    format='[%(levelname) 5s/%(asctime)s] %(name)s: %(message)s',
-    level=logging.WARNING
-)
+from telethon.tl.functions.messages import GetHistoryRequest
 
 env = environ.Env(
     # set casting, default value
@@ -33,9 +29,30 @@ search_words = []
 
 async def start():
     """Main processing function."""
-    global receiver
-    receiver = await client.get_entity(chat_name)
-    logger.info('Scraping chat %s', receiver.title)
+    channel = await client.get_entity(chat_name)
+    logger.info('Scraping chat %s', channel.title)
+
+    posts = await client(GetHistoryRequest(
+        peer=channel,
+        limit=100,
+        offset_date=None,
+        offset_id=0,
+        max_id=0,
+        min_id=0,
+        add_offset=0,
+        hash=0))
+
+    for message in posts.messages:
+        logger.info(f'{message.id}: {message.text}')
+        if message.photo:
+            logger.info(f'File Name :{str(message.file.name)}')
+            path = await client.download_media(message.media, "./images/mem")
+            logger.info('File saved to', path)  # printed after download is done
+
+    # logger.info(f'posts {pformat(posts[0])}')
+    logger.info(f'posts {posts}')
+
+
 
 
 def main():
