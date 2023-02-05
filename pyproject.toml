@@ -10,6 +10,7 @@ python = "^3.11"
 telethon = "^1.26.1"
 loguru = "^0.6.0"
 python-environ = "^0.4.54"
+pytesseract = "^0.3.10"
 
 
 [build-system]
