@@ -1,15 +1,3 @@
---extra-index-url https://download.pytorch.org/whl/cu117
+--extra-index-url https://download.pytorch.org/whl/cu113
 torch
 torchvision
-
-fairscale
-ftfy
-huggingface-hub
-Pillow
-timm
-transformers==4.15.0
-open_clip_torch
-requests
-clip-interrogator==0.4.1
--e git+https://github.com/pharmapsychotic/BLIP.git@lib#egg=blip
-
