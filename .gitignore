@@ -1,3 +1,4 @@
 .env
 *.session
 .idea
+*.jpg
