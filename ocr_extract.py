@@ -12,12 +12,16 @@ for file in folder.iterdir():
     # check if the file is a png file
     if file.suffix == '.jpg':
         # open the image
-        image = Image.open(file)
-        # convert the image to a string
-        text = pytesseract.image_to_string(image, lang='rus')
-        # print the text
         print(file.name)
-        print(text)
-        print('-' * 80)
+        try:
+            image = Image.open(file)
+            # convert the image to a string
+            text = pytesseract.image_to_string(image, lang='rus')
+            # print the text
+            print(text)
+            print('-' * 80)
+        except:
+            pass
+
 
 print(pytesseract.image_to_string('test.png'))
