@@ -15,6 +15,8 @@ from loguru import logger
 from telethon import TelegramClient
 from telethon.tl.functions.messages import GetHistoryRequest
 
+from ocr_extract import ocr_image
+
 # from telethon.tl.functions.messages import GetHistoryRequest
 
 env = environ.Env(
@@ -48,7 +50,9 @@ def create_sqlite_table(name: PathLike) -> None:
                  msg_text text,
                  msg_date text,
                  file_name text,
-                 file_path text
+                 file_path text,
+                 ocr_text text,
+                 link text
                  )
                  '''
               )
@@ -61,26 +65,23 @@ def save_file_to_db(
         dt: datetime.datetime,
         filename: str,
         file_path: str,
+        ocr_text: str,
+        link: str,
         db_path: str = './files.db',
 ):
     logger.info(f'Saving file {filename} to db')
     conn = sqlite3.connect(db_path)
     c = conn.cursor()
-    c.execute("INSERT INTO files(msg_text, msg_date, file_name, file_path) VALUES (?, ?, ?, ?)", (
+    c.execute("INSERT INTO files(msg_text, msg_date, file_name, file_path, ocr_text ) VALUES (?, ?, ?, ?, ?, ?)", (
         message,
         dt,
         filename,
         file_path,
+        ocr_text,
+        link,
     ))
     conn.commit()
     conn.close()
-
-
-def ocr_image(image_path: PathLike) -> str:
-    """Extract text from image using OCR."""
-    image = Image.open(image_path)
-    text = pytesseract.image_to_string(image, lang='rus')
-    return text
 
 
 async def start():
@@ -103,9 +104,19 @@ async def start():
     for message in posts.messages:
         logger.info(f'{message.id}: {message.text}')
         if message.photo:
-            logger.info(f'File Name :{str(message.file.name)}')
+            logger.info(f'File Name :{str(message.id)}')
             path = await client.download_media(message.media, "./images/mem")
-            save_file_to_db(message.text, message.date, path, path)
+            ocr_text = ocr_image(path)
+            url = f'https://t.me/c/{message.channel.id}/{message.id}'
+
+            save_file_to_db(
+                message=message.text,
+                dt=message.date,
+                filename=path,
+                file_path=path,
+                ocr_text=ocr_text,
+                link=url,
+            )
             logger.info('File saved to', path)  # printed after download is done
 
     # logger.info(f'posts {pformat(posts[0])}')

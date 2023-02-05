@@ -1,6 +1,6 @@
 import sqlite3
 
-from bot import create_sqlite_table
+from bot_scrape import create_sqlite_table
 
 def check_tables():
     conn = sqlite3.connect('files.db')
