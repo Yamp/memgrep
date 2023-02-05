@@ -51,7 +51,8 @@ def create_sqlite_table(name: PathLike) -> None:
                  msg_date text,
                  file_name text,
                  file_path text,
-                 ocr_text text
+                 ocr_text text,
+                 link text
                  )
                  '''
               )
@@ -65,17 +66,19 @@ def save_file_to_db(
         filename: str,
         file_path: str,
         ocr_text: str,
+        link: str,
         db_path: str = './files.db',
 ):
     logger.info(f'Saving file {filename} to db')
     conn = sqlite3.connect(db_path)
     c = conn.cursor()
-    c.execute("INSERT INTO files(msg_text, msg_date, file_name, file_path, ocr_text ) VALUES (?, ?, ?, ?, ?)", (
+    c.execute("INSERT INTO files(msg_text, msg_date, file_name, file_path, ocr_text ) VALUES (?, ?, ?, ?, ?, ?)", (
         message,
         dt,
         filename,
         file_path,
         ocr_text,
+        link,
     ))
     conn.commit()
     conn.close()
@@ -104,6 +107,7 @@ async def start():
             logger.info(f'File Name :{str(message.id)}')
             path = await client.download_media(message.media, "./images/mem")
             ocr_text = ocr_image(path)
+            url = f'https://t.me/c/{message.channel.id}/{message.id}'
 
             save_file_to_db(
                 message=message.text,
@@ -111,6 +115,7 @@ async def start():
                 filename=path,
                 file_path=path,
                 ocr_text=ocr_text,
+                link=url,
             )
             logger.info('File saved to', path)  # printed after download is done
 
