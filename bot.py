@@ -42,7 +42,7 @@ def create_sqlite_table(name: PathLike) -> None:
     conn = sqlite3.connect(name)
     c = conn.cursor()
     c.execute('''
-    CREATE TABLE IF NOT EXISTS posts
+    CREATE TABLE IF NOT EXISTS files
                  (
                  id INTEGER PRIMARY KEY UNIQUE NOT NULL,
                  msg_text text,
@@ -61,11 +61,12 @@ def save_file_to_db(
         dt: datetime.datetime,
         filename: str,
         file_path: str,
-        db_path: str = 'files.db',
+        db_path: str = './files.db',
 ):
-    conn = sqlite3.connect(file_path)
+    logger.info(f'Saving file {filename} to db')
+    conn = sqlite3.connect(db_path)
     c = conn.cursor()
-    c.execute("INSERT INTO files VALUES (?, ?, ?)", (
+    c.execute("INSERT INTO files(msg_text, msg_date, file_name, file_path) VALUES (?, ?, ?, ?)", (
         message,
         dt,
         filename,
@@ -104,7 +105,7 @@ async def start():
         if message.photo:
             logger.info(f'File Name :{str(message.file.name)}')
             path = await client.download_media(message.media, "./images/mem")
-            # save_file_to_db(message.text, message.date, path, path)
+            save_file_to_db(message.text, message.date, path, path)
             logger.info('File saved to', path)  # printed after download is done
 
     # logger.info(f'posts {pformat(posts[0])}')
