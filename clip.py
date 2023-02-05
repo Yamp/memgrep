@@ -158,7 +158,7 @@ with gr.Blocks(css=css) as block:
             loading_icon = gr.HTML(loading_icon_html, visible=False)
             share_button = gr.Button("Share to community", elem_id="share-btn", visible=False)
 
-        examples=[['images/meme1.png', "best",4], ['images/meme2.png',"fast",4]]
+        examples=[['images/meme1.jpg', "best",4], ['images/meme2.jpg',"fast",4]]
         ex = gr.Examples(examples=examples, fn=inference, inputs=[input_image, mode_input, flavor_input], outputs=[output_text, share_button, community_icon, loading_icon], cache_examples=True, run_on_click=True)
         ex.dataset.headers = [""]
 
