@@ -72,7 +72,7 @@ def save_file_to_db(
     logger.info(f'Saving file {filename} to db')
     conn = sqlite3.connect(db_path)
     c = conn.cursor()
-    c.execute("INSERT INTO files(msg_text, msg_date, file_name, file_path, ocr_text ) VALUES (?, ?, ?, ?, ?, ?)", (
+    c.execute("INSERT INTO files(msg_text, msg_date, file_name, file_path, ocr_text, link ) VALUES (?, ?, ?, ?, ?, ?)", (
         message,
         dt,
         filename,
@@ -107,7 +107,7 @@ async def start():
             logger.info(f'File Name :{str(message.id)}')
             path = await client.download_media(message.media, "./images/mem")
             ocr_text = ocr_image(path)
-            url = f'https://t.me/c/{message.channel.id}/{message.id}'
+            url = f'https://t.me/{chat_name}/{message.id}'
 
             save_file_to_db(
                 message=message.text,

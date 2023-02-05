@@ -19,7 +19,7 @@ def find_postst(needle: str) -> list[str]:
             max_deletions=0,
             max_substitutions=2,
         ):
-            res += [d.]
+            res += [d[6]]
     # print(data)
 
 def search_text(needle: str):

@@ -1,4 +1,5 @@
 import sqlite3
+from pprint import pprint
 
 from bot_scrape import create_sqlite_table
 
@@ -17,7 +18,7 @@ def main():
     conn = sqlite3.connect('files.db')
     c = conn.cursor()
     c.execute("SELECT * FROM files")
-    print(c.fetchall())
+    pprint(c.fetchall())
     conn.commit()
     conn.close()
 
