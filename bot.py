@@ -1,5 +1,6 @@
 import logging
 
+import environ
 from loguru import logger
 from telethon import TelegramClient
 
@@ -8,11 +9,21 @@ logging.basicConfig(
     level=logging.WARNING
 )
 
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
+# reading .env file
+environ.Env.read_env()
+# False if not in os.environ
+DEBUG = env('DEBUG')
+
+
 # These example values won't work. You must get your own api_id and
 # api_hash from https://my.telegram.org, under API Development.
-api_id = 109107
-api_hash = "bea74e3b2fb952d3f2bc1f4cfee3ad23"
-session_name = "simitrius.session"
+api_id = env('API_ID')
+api_hash = env('API_HASH')
+session_name = env('SESSION_NAME')
 chat_name = "memes161"
 
 client = TelegramClient(session=session_name, api_id=api_id, api_hash=api_hash)
