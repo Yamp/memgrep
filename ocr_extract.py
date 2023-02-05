@@ -16,12 +16,12 @@ for file in folder.iterdir():
         try:
             image = Image.open(file)
             # convert the image to a string
-            text = pytesseract.image_to_string(image, lang='rus')
+            text1 = pytesseract.image_to_string(image, lang='rus')
+            text2 = pytesseract.image_to_string(image, lang='eng')
             # print the text
-            print(text)
+            print(text1)
+            print(text2)
             print('-' * 80)
         except:
             pass
 
-
-print(pytesseract.image_to_string('test.png'))
