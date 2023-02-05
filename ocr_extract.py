@@ -18,5 +18,6 @@ for file in folder.iterdir():
         # print the text
         print(file.name)
         print(text)
+        print('-' * 80)
 
 print(pytesseract.image_to_string('test.png'))
