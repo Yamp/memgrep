@@ -6,12 +6,17 @@ name = "pypi"
 [[source]]
 url = "https://download.pytorch.org/whl/cu113"
 verify_ssl = true
-name = "torch"
+name = "torch113"
+
+[[source]]
+url = "https://download.pytorch.org/whl/cu117"
+verify_ssl = true
+name = "torch117"
 
 [packages]
 requests = "*"
-torch= {version="==1.13.1+cu117", index="torch"}
-torchvision={version="==0.14.1+cu117", index="torch"}
+torch= {version="==1.13.1+cu117", index="torch113"}
+torchvision={version="==0.14.1+cu117", index="torch113"}
 telethon = "==1.16.1"
 loguru = ">=0.6.0"
 python-environ = ">=0.4.54"
