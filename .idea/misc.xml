@@ -3,5 +3,5 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="Pipenv (memgrep)" project-jdk-type="Python SDK" />
+  <component name="ProjectRootManager" version="2" project-jdk-name="Poetry (memgrep)" project-jdk-type="Python SDK" />
 </project>

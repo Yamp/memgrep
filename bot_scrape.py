@@ -6,8 +6,6 @@ import sqlite3
 from os import PathLike
 
 import environ
-import pytesseract
-from PIL import Image
 from loguru import logger
 # import pytesseract
 # from PIL import Image
@@ -105,7 +103,7 @@ async def start():
         logger.info(f'{message.id}: {message.text}')
         if message.photo:
             logger.info(f'File Name :{str(message.id)}')
-            path = await client.download_media(message.media, "./images/mem")
+            path = await client.download_media(message.media, f"./images/{message.id}.jpg")
             ocr_text = ocr_image(path)
             url = f'https://t.me/{chat_name}/{message.id}'
 

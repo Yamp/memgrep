@@ -8,29 +8,11 @@
 .env,3/c/3c84dcdc6bbe3d7817c49dcdc327b926fea1808a
 ;
 drop_all.sh,9/b/9b929d33083172e237d1250d1096d3ac3c6afe03
-@
-requirements.txt,1/9/19359a61ae2446b51b549167b014da2fcf265768
 <
 share_btn.py,0/8/089b32ed28e2f65f667b6f5a3136d23d8fda48f6
 9
 	search.py,1/2/1288635c2816a600e1506247ea4bf8e509750e69
 <
 Pipfile.lock,e/5/e563262209b7c2e62d1869582c8134583baa2204
->
-pyproject.toml,5/d/5d07e7d72637aa0d59c89d381fe6dc4cf46e2491
-7
-Pipfile,1/5/15af4b3d30054104e85f65a444b1db188c5deefb
-:
-
-db_test.py,c/b/cb4ecb58348e76a35db9c63823633a5cef069801
->
-gradio_demo.py,6/7/6794b0455a9056ea878c54be037dda2d1209d9f6
->
-ocr_extract.py,a/f/afecec431369391f1977e15d6ab310b7949537a9
 5
 ci.py,c/b/cb08637d5f77b7a69d5de979447fde404e5be155
-=
-bot_scrape.py,9/c/9ce60fe159008a6c3ea1ee877400ba79af91e806
-:
-
-bot_api.py,6/f/6f26942aed67187028b04e8336e317661d62c1ce
