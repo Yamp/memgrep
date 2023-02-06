@@ -2,6 +2,8 @@
 
 import sys
 
+from loguru import logger
+
 sys.path.extend([".", "..", "../.."])
 
 from telegram import Update
@@ -18,11 +20,16 @@ storage = ImageDB()
 
 async def search_memes(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Search matching memes in the database and return the bot respons text."""
+    req = update.message.text.removeprefix("/search ")
+
+    logger.info(f"Looking for {req}")
     msgs = index.search(SearchRequest(
-        query=update.message.text,
+        query=req,
     ))
 
-    await update.message.reply_text(f"Hello {msgs}")
+    res = [m.post_link for m in msgs]
+
+    await update.message.reply_text(f"Hello {res}")
 
 
 async def index_memes(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:

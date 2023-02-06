@@ -59,10 +59,10 @@ class TelegramScraper:
         )
         return posts.messages
 
-    async def process_message(self, message: Message):
+    async def process_message(self, message: Message, chat_slug: str):
         """Process message and save it to storage."""
         path = await self.download_img(message)
-        self.save_message(message, path)
+        self.save_message(message, path, chat_slug=chat_slug)
         # res = self.pool.submit(self.save_message, message, path)
         # print(res.result())
 
@@ -78,12 +78,13 @@ class TelegramScraper:
             self,
             message: Message,
             path: Path,
+            chat_slug: str,
     ):
         print(f"Saving img {path}")  # noqa
 
         self.storage.save_image(
             image=path.read_bytes(),
-            chat_id=str(message.to_id.channel_id),
+            chat_id=chat_slug,
             message_id=message.id,
             img_num=0,
             img_type="jpg",
@@ -92,7 +93,7 @@ class TelegramScraper:
         self.index.add_record(ImageRecord(
             id=message.to_id.channel_id + message.id,
             message_id=message.id,
-            chat=message.to_id.channel_id,
+            chat=chat_slug,
             sender_id=ifnone(message.from_id, 0),
             dt=message.date,
             msg_text=ifnone(message.text, ""),
@@ -103,18 +104,18 @@ class TelegramScraper:
             reactions=[],
             comments=[],
             data_link=str(path.absolute()),
-            post_link=f"https://t.me/{message.to_id.channel_id}/{message.id}",
+            post_link=f"https://t.me/{chat_slug}/{message.id}",
         ))
 
         logger.info(f"Saved message {message.id} to file {path}, storage and index.")
 
     async def scrape_messages(
             self,
-            chat_id: str,
+            chat_slug: str,
     ):
-        messages = await self.get_messages(chat_id)
+        messages = await self.get_messages(chat_slug)
 
         for message in messages:
             logger.info(f"{message.id}: {message.text}")
             if message.photo:
-                await self.process_message(message)
+                await self.process_message(message, chat_slug)

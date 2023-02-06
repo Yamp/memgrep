@@ -5,8 +5,8 @@ from datetime import datetime
 
 import redis
 from loguru import logger
-from more_itertools import chunked
 from pydantic import BaseModel
+from redis.commands.search.query import Query
 
 import settings
 
@@ -181,29 +181,31 @@ class MemDB:
         The results are sorted by the fuzzy match quality
 
         """
-        res = self.redis.execute_command(
-            "FT.SEARCH tg_memes\n"  # noqa
-            + f"@ocr_rus:'{request.query}'\n"
-            # + f"@ocr_eng:'{request.query}'\n"
-            # + f"@semantic_data:'{request.query}'\n"
-            # + f"@dt:[{request.dt_start.timestamp()} {request.dt_end.timestamp()}]\n" * (request.dt_start is not None)
-            # + f"@chat:{request.chats}\n"
-            # + f"@sender_id:{request.senders}\n"
-            + f"LIMIT 0 {request.max_results}\n",
-            # f"SORTBY 1 @dt DESC",
-        )
-        if res[0] == 0:
-            assert len(res) == 1
-            return []
+        res = self.redis.ft("tg_memes").search(Query(
+            f"@ocr_rus:{request.query}",
+        ))
+
+        # res = self.redis.execute_command(
+        #     "FT.SEARCH tg_memes\n"  # noqa
+        #     + f"@ocr_rus:'{request.query}'\n"
+        #     # + f"@ocr_eng:'{request.query}'\n"
+        #     # + f"@semantic_data:'{request.query}'\n"
+        #     # + f"@dt:[{request.dt_start.timestamp()} {request.dt_end.timestamp()}]\n"
+        #     # + f"@chat:{request.chats}\n"
+        #     # + f"@sender_id:{request.senders}\n"
+        #     + f"LIMIT 0 {request.max_results}\n",
+        #     # f"SORTBY 1 @dt DESC",
+        # )
 
         # assert res[0] == (len(res) - 1) / 2
 
         records = []
-        for _doc, mem in chunked(res[1:], 2):
-            d = dict(chunked(mem, 2))  # noqa
+        for doc in res.docs:
+            d = doc.__dict__  # noqa
             d["semantic_vector"] = parse_list(d["semantic_vector"])
             d["reactions"] = parse_list(d["reactions"])
             d["comments"] = parse_list(d["comments"])
+            d["id"] = int(d["id"].removeprefix("doc:"))
             records += [ImageRecord(**d)]
 
         return records
