@@ -9,10 +9,25 @@ name = "memgrep"
 readme = "README.md"
 version = "0.1.0"
 
-[[tool.poetry.source]]
-name = "torch"
-secondary = true
-url = "https://download.pytorch.org/whl/cu116"
+[tool.poetry.dependencies]
+fire = "*"
+fuzzysearch = "*"
+loguru = ">=0.6.0"
+minio = "*"
+# torch = {version = "==1.13.1", index = "pypi"}
+# torchvision = {version = "==0.14.1", index = "pypi"}
+# clip-interrogator = "==0.4.1"
+# easyocr = "*"
+more_itertools = "*"
+numpy = "*"
+pydantic = "*"
+pytesseract = "==0.3.10"
+python = "^3.10"
+python-environ = ">=0.4.54"
+python-telegram-bot = "*"
+redis = "*"
+requests = "*"
+telethon = "==1.16.1"
 
 [tool.ruff]
 # not enabled ANN101, EM, RUF, D, ERA, T20, A, N

@@ -1,9 +1,14 @@
 from __future__ import annotations
 
+import json
 from datetime import datetime
 
 import redis
+from loguru import logger
+from more_itertools import chunked
 from pydantic import BaseModel
+
+import settings
 
 
 class SearchRequest(BaseModel):
@@ -51,10 +56,10 @@ class MemDB:
 
     def __init__(
             self,
-            redis_url: str = "redis://redis:6379",
+            redis_url: str = settings.REDIS_URL,
     ):
-        self.pool = redis.ConnectionPool.from_url(redis_url, db=0)
-        self.redis = redis.Redis(connection_pool=self.pool)
+        self.pool = redis.ConnectionPool.from_url(redis_url, decode_responses=True)
+        self.redis = redis.Redis(connection_pool=self.pool, encoding="utf-8", decode_responses=True)
 
     def create_db(self) -> bool:
         """Create a redis table to store image records.
@@ -63,30 +68,43 @@ class MemDB:
         Table is created with FT.CREATE command.
         """
         # check if table exists
-        if self.redis.exists("tg_memes"):
+        try:
+            self.redis.execute_command("FT.INFO tg_memes")
             return False
+        except redis.ResponseError:
+            logger.info("Index database created for the first time.")
+
+        # self.redis.execute_command("""
+        # FT.CREATE myIdx
+        # ON HASH
+        # PREFIX 1 doc:
+        # SCHEMA
+        #  title TEXT WEIGHT 5.0
+        #   body TEXT url TEXT
+        # """)
 
         # create table
         self.redis.execute_command("""
         FT.CREATE tg_memes
         ON HASH
-        PREFIX 1 tg_memes:
+        PREFIX 1 doc:
         SCHEMA
-            id NUMERIC SORTABLE
             message_id NUMERIC SORTABLE
             chat TEXT SORTABLE
             sender_id NUMERIC SORTABLE
             dt NUMERIC SORTABLE
             msg_text TEXT SORTABLE
             ocr_rus TEXT SORTABLE
-            ocr_eng TEXT SORTABLE
-            semantic_data TEXT SORTABLE
-            semantic_vector NUMERIC SORTABLE
-            comments TEXT SORTABLE
-            reactions TEXT SORTABLE
-            data_link TEXT SORTABLE
-            post_link TEXT SORTABLE
         """)
+
+        #             ocr_eng TEXT SORTABLE
+        #             semantic_data TEXT SORTABLE
+        #             semantic_vector NUMERIC SORTABLE
+        #             comments TEXT SORTABLE
+        #             reactions TEXT SORTABLE
+        #             data_link TEXT SORTABLE
+        #             post_link TEXT SORTABLE
+
         return None
 
     def add_record(self, record: ImageRecord) -> bool:
@@ -98,24 +116,52 @@ class MemDB:
         if self.redis.exists(f"tg_memes:{record.id}"):
             return False
 
-        self.redis.execute_command(
-            "HSET",
-            f"tg_memes:{record.id}",
-            "id", record.id,
-            "message_id", record.message_id,
-            "chat", record.chat,
-            "sender_id", record.sender_id,
-            "dt", record.dt.timestamp(),
-            "msg_text", record.msg_text,
-            "ocr_rus", record.ocr_rus,
-            "ocr_eng", record.ocr_eng,
-            "semantic_data", record.semantic_data,
-            "semantic_vector", *record.semantic_vector,
-            "comments", *record.comments,
-            "reactions", *record.reactions,
-            "data_link", record.data_link,
-            "post_link", record.post_link,
+        d = record.dict()
+        d["dt"] = d["dt"].timestamp()
+        d["semantic_vector"] = ",".join(map(str, d["semantic_vector"]))
+        d["comments"] = ",".join(d["comments"])
+        d["reactions"] = ",".join(d["reactions"])
+        d["msg_text"] = d["msg_text"] or "None"
+        self.redis.hset(
+            f"doc:{record.id}",
+            mapping=d,
         )
+
+        # cmd = f"""
+        # HSET doc:{record.id}
+        #     message_id {record.message_id}
+        #     chat {record.chat}
+        #     sender_id {record.sender_id}
+        #     dt {record.dt.timestamp()}
+        #     msg_text "{record.msg_text or 'None'}"
+        #     ocr_rus "{record.ocr_rus}"
+        #     ocr_eng "{record.ocr_eng}"
+        #     semantic_data "{record.semantic_data}"
+        #     semantic_vector "{record.semantic_vector}"
+        #     comments "{record.comments}"
+        #     reactions "{record.reactions}"
+        #     data_link "{record.data_link}"
+        #     post_link "{record.post_link}"
+        # """
+        # logger.info(cmd)
+        # try:
+        #     self.redis.execute_command(cmd)
+        # except redis.ResponseError as e:
+        #
+        #     logger.error(e)
+        #     logger.error(record)
+        #     logger.error(cmd)
+        #     return False
+        #             dt {record.dt.timestamp()}
+        #             msg_text {record.msg_text}
+        #             ocr_rus {record.ocr_rus}
+        #             ocr_eng {record.ocr_eng}
+        #             semantic_data {record.semantic_data}
+        #             semantic_vector {record.semantic_vector}
+        #             comments {record.comments}
+        #             reactions {record.reactions}
+        #             data_link {record.data_link}
+        #             post_link {record.post_link}
         return True
 
     def search(self, request: SearchRequest) -> list[ImageRecord]:
@@ -135,14 +181,27 @@ class MemDB:
         The results are sorted by the fuzzy match quality
 
         """
-        self.redis.execute_command(
-            "FT.SEARCH tg_memes"
-            f"@ocr_rus:{request.query}"
-            f"@ocr_eng:{request.query}"
-            f"@semantic_data:{request.query}"
-            f"@dt:[{request.dt_start.timestamp()} {request.dt_end.timestamp()}]"
-            f"@chat:{request.chats}"
-            f"@sender_id:{request.senders}"
-            f"LIMIT 0 {request.max_results}"
-            f"SORTBY 1 @dt DESC",
+        res = self.redis.execute_command(
+            "FT.SEARCH tg_memes\n"  # noqa
+            + f"@ocr_rus:'{request.query}'\n"
+            # + f"@ocr_eng:'{request.query}'\n"
+            # + f"@semantic_data:'{request.query}'\n"
+            # + f"@dt:[{request.dt_start.timestamp()} {request.dt_end.timestamp()}]\n" * (request.dt_start is not None)
+            # + f"@chat:{request.chats}\n"
+            # + f"@sender_id:{request.senders}\n"
+            + f"LIMIT 0 {request.max_results}\n",
+            # f"SORTBY 1 @dt DESC",
         )
+        assert res[0] == 1
+        records = []
+        for _doc, mem in chunked(res[1:], 2):
+            d = dict(chunked(mem, 2))  # noqa
+            d["semantic_vector"] = parse_list(d["semantic_vector"])
+            d["reactions"] = parse_list(d["reactions"])
+            d["comments"] = parse_list(d["comments"])
+            records += [ImageRecord(**d)]
+
+        return records
+
+def parse_list(s: str):
+    return json.loads(s) if s else []

@@ -1,0 +1,44 @@
+#!/usr/bin/env python3
+
+from telegram import Update
+from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
+
+import settings
+from data.minio_db import ImageDB
+from data.redis_db import MemDB, SearchRequest
+from scraper.tg import TelegramScraper
+
+index = MemDB()
+storage = ImageDB()
+
+
+async def search_memes(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Search matching memes in the database and return the bot respons text."""
+    msgs = index.search(SearchRequest(
+        query=update.message.text,
+    ))
+
+    await update.message.reply_text(f"Hello {msgs}")
+
+
+async def index_memes(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Index a chat."""
+    scraper = TelegramScraper(storage, index)
+    await scraper.scrape_messages(update.message.text)
+    await update.message.reply_text(f"Hello {update.effective_user.first_name}")
+
+
+async def hello(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    await update.message.reply_text(f"Hello {update.effective_user.first_name}")
+
+
+def main():
+    app = ApplicationBuilder().token(settings.BOT_TOKEN).build()
+    app.add_handler(CommandHandler("hello", hello))
+    app.add_handler(CommandHandler("search", search_memes))
+    app.add_handler(CommandHandler("index", index_memes))
+    app.run_polling()
+
+
+if __name__ == "__main__":
+    main()
