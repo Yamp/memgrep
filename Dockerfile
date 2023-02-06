@@ -1,15 +1,37 @@
-FROM python:3.11
+FROM ubuntu:22.04 as base
 
-WORKDIR /var/www/memgrep
+ARG UID=82
+ARG GID=82
 
-SHELL ["/bin/bash", "-oeu", "pipefail", "-c"]
-RUN curl -sSL https://install.python-poetry.org | python3 -
+WORKDIR /usr/src/memgrep
 
-ENV PATH=/root/.local/bin:$PATH
-RUN /root/.local/bin/poetry config virtualenvs.create false
+RUN addgroup --gid ${GID} memgrep \
+    && adduser \
+    --disabled-password \
+    --home "$(pwd)" \
+    --no-create-home \
+    --ingroup memgrep \
+    --uid ${UID} \
+    memgrep && \
+    chown memgrep:memgrep /usr/src/memgrep
 
-COPY poetry.lock pyproject.toml ./
+RUN --mount=type=cache,target=/var/cache/apt \
+    --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
+    apt-get update
 
-RUN  /root/.local/bin/poetry install --only main --no-interaction --no-ansi --no-cache
+FROM base
 
-COPY . .
+RUN --mount=type=cache,target=/var/cache/apt \
+    --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
+    apt-get install -y python3 pipenv curl
+
+USER memgrep
+
+ENV PIPENV_VENV_IN_PROJECT=true
+
+COPY --chown=memgrep:memgrep ./Pipfile* .
+RUN pipenv install --deploy
+
+COPY . . 
+
+CMD ["pipenv", "run", "python3", "bot_api.py"]
