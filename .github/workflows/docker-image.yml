@@ -26,3 +26,11 @@ jobs:
       with:
         push: true
         tags: vgolovnin/memgrep:bot
+    - name: Deploy 
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USER }}
+        key: ${{ secrets.SSH_KEY }}
+        script: |
+                  cd memgrep && git pull && docker compose pull && docker compose up -d
