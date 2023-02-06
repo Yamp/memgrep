@@ -13,10 +13,10 @@ python-environ = ">=0.4.54"
 python-telegram-bot = "*"
 redis = "*"
 requests = "*"
-urllib3 = "*"
 telethon = "==1.16.1"
 torch = {version = "==1.13.1", index = "pypi"}
 torchvision = {version = "==0.14.1", index = "pypi"}
+urllib3 = "*"
 
 [requires]
 python_version = "3.10"

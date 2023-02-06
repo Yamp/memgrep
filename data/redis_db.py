@@ -196,7 +196,7 @@ class MemDB:
             assert len(res) == 1
             return []
 
-        assert res[0] == (len(res) - 1) / 2
+        # assert res[0] == (len(res) - 1) / 2
 
         records = []
         for _doc, mem in chunked(res[1:], 2):

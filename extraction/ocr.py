@@ -1,6 +1,6 @@
+import warnings
 from pathlib import Path
 
-import easyocr
 from PIL import Image
 from pytesseract import pytesseract
 
@@ -34,5 +34,11 @@ class OCRExtractor:
             lang: str = "rus",
     ) -> str:
         """Extract text from image using easyOCR."""
+        try:
+            import easyocr
+        except ImportError:
+            warnings.warn("easyOCR is not installed.")
+            return ""
+
         reader = easyocr.Reader(["ru", "en"])
         return reader.readtext(Image.open(image))
