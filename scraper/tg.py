@@ -22,6 +22,7 @@ class TelegramScraper:
             storage: ImageDB,
             index: MemDB,
     ):
+        logger.info("Initializing scraper...")
         self.pool: ProcessPoolExecutor = ProcessPoolExecutor()
         self.storage: ImageDB = storage
         self.index: MemDB = index
@@ -45,6 +46,7 @@ class TelegramScraper:
             chat_id: str,
             limit: int | None = 10000,
     ) -> list:
+        logger.info(f"Getting messages from {chat_id}...")
         chat = await self.client.get_entity(chat_id)
 
         posts = await self.client(GetHistoryRequest(
@@ -57,11 +59,15 @@ class TelegramScraper:
             add_offset=0,
             hash=0),
         )
+        logger.info(f"Got {len(posts.messages)} messages from {chat_id}.")
+
         return posts.messages
 
     async def process_message(self, message: Message, chat_slug: str):
         """Process message and save it to storage."""
+        logger.info(f"Downloading image from {message.id}...")
         path = await self.download_img(message)
+        logger.info(f"Saving image from {message.id}...")
         self.save_message(message, path, chat_slug=chat_slug)
         path.unlink()
         # res = self.pool.submit(self.save_message, message, path)
@@ -116,9 +122,10 @@ class TelegramScraper:
             self,
             chat_slug: str,
     ):
-        messages = await self.get_messages(chat_slug)
+        messages = await self.get_messages(chat_slug, limit=10000)
 
         for message in messages:
             logger.info(f"{message.id}: {message.text}")
             if message.photo:
+                logger.info(f"Found image in {message.id}.")
                 await self.process_message(message, chat_slug)
