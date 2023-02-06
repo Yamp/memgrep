@@ -89,8 +89,8 @@ repos:
 #- repo: https://git.shore.co.il/nimrod/docker-pre-commit.git
 #  rev: v0.3.0
 #  hooks:
-#  - id: docker-compose
-#    #  - id: dockerfile-lint
+##  - id: docker-compose
+#  - id: dockerfile-lint
 
 - repo: https://github.com/hadolint/hadolint
   rev: v2.12.1-beta
@@ -98,17 +98,10 @@ repos:
   - id: hadolint
     args: [--ignore, DL3008]
 
-#- repo: https://github.com/wemake-services/dotenv-linter
-#  rev: 0.4.0      # Use the ref you want to point at
-#  hooks:
-#  - id: dotenv-linter
-
-#- repo: https://github.com/pre-commit/mirrors-clang-format
-#  rev: v15.0.7
-#  hooks:
-#  - id: clang-format
-#    args: [--style=file, --assume-filename=.clang-format]
-#    files: \.(c|cc|cpp|cxx|h|hh|hpp|hxx|proto|protodevel|prototest)$
+- repo: https://github.com/wemake-services/dotenv-linter
+  rev: 0.4.0      # Use the ref you want to point at
+  hooks:
+  - id: dotenv-linter
 
 
 - repo: https://github.com/pecigonzalo/pre-commit-shfmt
