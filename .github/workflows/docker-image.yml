@@ -8,8 +8,7 @@ on:
 
 jobs:
 
-  build:
-
+  ssh:
     runs-on: ubuntu-latest
 
     steps:
