@@ -93,7 +93,7 @@ async def start():
 
     posts = await client(GetHistoryRequest(
         peer=channel,
-        limit=100,
+        limit=1000,
         offset_date=None,
         offset_id=0,
         max_id=0,

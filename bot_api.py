@@ -8,7 +8,7 @@ from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 
 async def search_memes(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Search matching memes in the database and return the bot respons text."""
-    args = context.args[0]
+    args = context.args
     conn = sqlite3.connect('files.db')
     c = conn.cursor()
     table = c.execute("SELECT * FROM files")
@@ -16,19 +16,26 @@ async def search_memes(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
     msgs = []
     for d in data:
         ocr_text = d[5]
-        if ms := find_near_matches(
-            args,
-            ocr_text,
-            # max_l_dist=2,
-            max_insertions=0,
-            max_deletions=0,
-            max_substitutions=2,
-        ):
-            # msgs += [str(d) + '\n' + str(d[6])]
-            m = ms[0]
-            match = str(d[5])[m.start:m.end]
-            s = match + '\n' + '-' * 50 + '\n ' + str(d[6] + ' ')
-            msgs += [s]
+        res = []
+        for a in args:
+            if ms := find_near_matches(
+                a,
+                ocr_text,
+                # max_l_dist=2,
+                max_insertions=0,
+                max_deletions=0,
+                max_substitutions=2,
+            ):
+                # msgs += [str(d) + '\n' + str(d[6])]
+                m = ms[0]
+                match = str(d[5])[m.start:m.end]
+                s = match
+                res += [s]
+        msgs += ['|'.join(res) + str(d[6])]
+        msgs = sorted(msgs, key=lambda x: len(x), reverse=True)
+
+
+    print(f'sending message {msgs}')
 
     await update.message.reply_text(f'Hello {msgs}')
 
