@@ -4,3 +4,4 @@ cache/
 images/
 /.*
 minio_storage/
+*.session

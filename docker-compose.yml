@@ -10,6 +10,7 @@ services:
     ports:
     - 127.0.0.1:5000:5000
     volumes:
+    - ./prod.session:/var/www/memgrep/prod.session
     - ./.env:/var/www/memgrep/.env
 
 
