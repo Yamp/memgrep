@@ -1,7 +1,7 @@
-FROM python:3.10-alpine3.16 as base
+FROM ubuntu:22.04 as base
 
-ARG UID=182
-ARG GID=182
+ARG UID=82
+ARG GID=82
 
 WORKDIR /usr/src/memgrep
 
@@ -15,9 +15,15 @@ RUN addgroup --gid ${GID} memgrep \
     memgrep && \
     chown memgrep:memgrep /usr/src/memgrep
 
+RUN --mount=type=cache,target=/var/cache/apt \
+    --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
+    apt-get update
+
 FROM base
 
-RUN pip install pipenv
+RUN --mount=type=cache,target=/var/cache/apt \
+    --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
+    apt-get install -y python3 python3-requests pipenv curl
 
 USER memgrep
 
