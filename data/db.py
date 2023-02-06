@@ -21,6 +21,7 @@ class ImageRecord(BaseModel):
     id: int
 
     # basic info
+    message_id: int
     chat: str
     sender_id: int
     dt: datetime
@@ -49,16 +50,29 @@ class MemDB:
         self.pool = redis.ConnectionPool.from_url(redis_url, db=0)
         self.redis = redis.Redis(connection_pool=self.pool)
 
-    def create_db(self) -> None:
+    def create_db(self) -> bool:
         """Create a redis table to store image records.
 
         Table should allow search filtering fields and fuzzy full text search for text fields.
         The table name is tg_memes.
         """
-        self.re
+        # check if table exists
+        if self.redis.exists("tg_memes"):
+            return False
 
-    def add_record(self, record: ImageRecord) -> None:
-        pass
+        # create table
+        self.redis.set("tg_memes", "[]")
+
+    def add_record(self, record: ImageRecord) -> bool:
+        """Add a record to the table.
+
+        if record is already in the table, return False.
+        Existance is checked by id field.
+        """
+        if self.redis.
+            return False
+
+
 
     def search(self, request: SearchRequest) -> list[ImageRecord]:
         pass
