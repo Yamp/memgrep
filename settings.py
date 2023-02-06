@@ -21,3 +21,5 @@ REDIS_URL = env("REDIS_URL")
 MINIO_URL = env("MINIO_URL")
 MINIO_ACCESS_KEY = env("MINIO_ACCESS_KEY")
 MINIO_SECRET_KEY = env("MINIO_SECRET_KEY")
+
+TMP_DIR = env("TMP_DIR", default="/tmp/memgrep")

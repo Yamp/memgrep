@@ -63,6 +63,7 @@ class TelegramScraper:
         """Process message and save it to storage."""
         path = await self.download_img(message)
         self.save_message(message, path, chat_slug=chat_slug)
+        path.unlink()
         # res = self.pool.submit(self.save_message, message, path)
         # print(res.result())
 
@@ -71,7 +72,9 @@ class TelegramScraper:
             message: Message,
     ) -> Path:
         """Download image from message and return path to it."""
-        path = await self.client.download_media(message.media, f"./images/{message.id}.jpg")
+        p = Path(settings.TMP_DIR) / f"./images/{message.id}.jpg"
+
+        path = await self.client.download_media(message.media, str(p.absolute()))
         return Path(path)
 
     def save_message(

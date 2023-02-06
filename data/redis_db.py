@@ -6,6 +6,7 @@ from datetime import datetime
 import redis
 from loguru import logger
 from pydantic import BaseModel
+from redis.commands.search.field import NumericField, TextField
 from redis.commands.search.query import Query
 
 import settings
@@ -84,18 +85,29 @@ class MemDB:
         # """)
 
         # create table
-        self.redis.execute_command("""
-        FT.CREATE tg_memes
-        ON HASH
-        PREFIX 1 doc:
-        SCHEMA
-            message_id NUMERIC SORTABLE
-            chat TEXT SORTABLE
-            sender_id NUMERIC SORTABLE
-            dt NUMERIC SORTABLE
-            msg_text TEXT SORTABLE
-            ocr_rus TEXT SORTABLE
-        """)
+        # self.redis.execute_command("""
+        self.redis.ft("tg_memes").create_index(
+            fields=[
+                NumericField("id", sortable=True),
+                NumericField("message_id", sortable=True),
+                NumericField("sender_id", sortable=True),
+                NumericField("dt", sortable=True),
+                TextField("chat", sortable=True),
+                TextField("msg_text", sortable=True),
+                TextField("ocr_rus", sortable=True),
+            ],
+        )
+        # FT.CREATE tg_memes
+        # ON HASH
+        # PREFIX 1 doc:
+        # SCHEMA
+        #     message_id NUMERIC SORTABLE
+        #     chat TEXT SORTABLE
+        #     sender_id NUMERIC SORTABLE
+        #     dt NUMERIC SORTABLE
+        #     msg_text TEXT SORTABLE
+        #     ocr_rus TEXT SORTABLE
+        # """)
 
         #             ocr_eng TEXT SORTABLE
         #             semantic_data TEXT SORTABLE
