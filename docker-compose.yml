@@ -2,7 +2,7 @@ version: '3.9'
 
 services:
   bot_api:
-    image: bot_api:latest
+    image: vgolovnin/memgrep:bot
     build:
       context: .
     command: ["python3", "scripts/start_api.py"]
