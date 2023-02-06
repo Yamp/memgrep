@@ -1,4 +1,4 @@
-version: "3.9"
+version: '3.9'
 
 services:
   bot_api:
@@ -6,15 +6,15 @@ services:
     container_name: bot_api
     restart: always
     ports:
-      - "5000:5000"
+    - 5000:5000
     volumes:
-      - ./bot_api:/app
+    - ./bot_api:/app
 
   redis:
     image: redis:latest
     container_name: redis
     restart: always
     ports:
-      - "6379:6379"
+    - 6379:6379
     volumes:
-      - ./redis:/data
+    - ./redis:/data

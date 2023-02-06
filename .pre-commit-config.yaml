@@ -1,0 +1,136 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+default_language_version:
+  python: python3.11
+#files:
+exclude: (^docs/.*$)|(^experiments/.*$)
+#fail_fast: true
+repos:
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v4.4.0
+  hooks:
+      # stupid errors
+  - id: trailing-whitespace
+  - id: end-of-file-fixer
+  - id: check-merge-conflict
+  - id: check-added-large-files
+    args: [--maxkb=200]
+  - id: fix-byte-order-marker
+  - id: check-case-conflict
+  - id: check-symlinks
+  - id: check-vcs-permalinks
+  - id: debug-statements
+  - id: destroyed-symlinks
+  - id: mixed-line-ending
+  - id: check-shebang-scripts-are-executable
+  - id: check-executables-have-shebangs
+  - id: check-docstring-first
+
+        # security
+  - id: detect-aws-credentials
+    args: [--allow-missing-credentials]
+  - id: detect-private-key
+
+        # syntax check
+  - id: check-yaml
+  - id: check-json
+  - id: check-xml
+  - id: check-toml
+  - id: check-ast
+  - id: requirements-txt-fixer
+
+        # code style
+  - id: pretty-format-json
+    args: [--autofix, --no-ensure-ascii, --no-sort-keys]
+
+        # Format YAML & TOML files prettily
+- repo: https://github.com/macisamuele/language-formatters-pre-commit-hooks
+  rev: v2.6.0
+  hooks:
+  - id: pretty-format-yaml
+    args: [--autofix, --indent, '2']
+  - id: pretty-format-toml
+    args: [--autofix]
+    #  - id: pretty-format-rust
+    #    args: [--autofix]
+
+#- repo: local
+#  hooks:
+#  - id: jupyter-nb-clear-output
+#    name: jupyter-nb-clear-output
+#    files: \.ipynb$
+#    stages: [commit]
+#    language: system
+#    entry: python -m nbconvert --ClearOutputPreprocessor.enabled=True --inplace
+#  - id: update-poetry
+#    name: update-poetry
+#    files: ^poetry.lock$
+#    stages: [commit]
+#    language: system
+#    entry: poetry update
+
+- repo: https://github.com/charliermarsh/ruff-pre-commit
+  rev: v0.0.241
+  hooks:
+  - id: ruff
+
+- repo: https://github.com/Anadea/pre-commit-config-shellcheck
+  rev: 0.3.4
+  hooks:
+  - id: pre-commit-config-shellcheck
+
+- repo: https://github.com/adrienverge/yamllint.git
+  rev: v1.29.0
+  hooks:
+  - id: yamllint
+    args: ['-d {extends: relaxed, rules: {line-length: disable}, ignore: chart}', -s]
+    files: \.(yaml|yml)$
+
+#- repo: https://git.shore.co.il/nimrod/docker-pre-commit.git
+#  rev: v0.3.0
+#  hooks:
+#  - id: docker-compose
+#    #  - id: dockerfile-lint
+
+- repo: https://github.com/hadolint/hadolint
+  rev: v2.12.1-beta
+  hooks:
+  - id: hadolint
+    args: [--ignore, DL3008]
+
+- repo: https://github.com/wemake-services/dotenv-linter
+  rev: 0.4.0      # Use the ref you want to point at
+  hooks:
+  - id: dotenv-linter
+
+#- repo: https://github.com/pre-commit/mirrors-clang-format
+#  rev: v15.0.7
+#  hooks:
+#  - id: clang-format
+#    args: [--style=file, --assume-filename=.clang-format]
+#    files: \.(c|cc|cpp|cxx|h|hh|hpp|hxx|proto|protodevel|prototest)$
+
+
+- repo: https://github.com/pecigonzalo/pre-commit-shfmt
+  rev: v2.1.0
+  hooks:
+  - id: shell-fmt
+    args:
+    - -i
+    - '2'
+
+- repo: https://github.com/pre-commit/pygrep-hooks
+  rev: v1.10.0
+  hooks:
+      #  - id: python-check-blanket-noqa
+      #  - id: python-check-blanket-type-ignore
+  - id: python-no-log-warn
+  - id: python-no-eval
+  - id: python-use-type-annotations
+  - id: text-unicode-replacement-char
+
+
+- repo: https://gitlab.com/smop/pre-commit-hooks
+  rev: v1.0.0
+  hooks:
+  - id: check-poetry

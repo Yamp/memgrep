@@ -1,17 +1,18 @@
 import sqlite3
 
-from fuzzysearch import find_near_matches
 from fire import Fire
+from fuzzysearch import find_near_matches
 
-def find_postst(needle: str) -> list[str]:
-    conn = sqlite3.connect('files.db')
+
+def find_posts(needle: str) -> list[str]:
+    conn = sqlite3.connect("files.db")
     c = conn.cursor()
     table = c.execute("SELECT * FROM files")
     data = table.fetchall()
     res = []
     for d in data:
         ocr_text = d[5]
-        if m := find_near_matches(
+        if find_near_matches(
             needle,
             ocr_text,
             max_l_dist=2,
@@ -23,13 +24,13 @@ def find_postst(needle: str) -> list[str]:
     # print(data)
 
 def search_text(needle: str):
-    conn = sqlite3.connect('files.db')
+    conn = sqlite3.connect("files.db")
     c = conn.cursor()
     table = c.execute("SELECT * FROM files")
     data = table.fetchall()
     for d in data:
         ocr_text = d[5]
-        if m := find_near_matches(
+        if find_near_matches(
             needle,
             ocr_text,
             max_l_dist=2,
@@ -37,8 +38,7 @@ def search_text(needle: str):
             max_deletions=0,
             max_substitutions=2,
         ):
-            print(d)
-    # print(data)
+            print(data)  # noqa
 
 if __name__ == "__main__":
     Fire(search_text)

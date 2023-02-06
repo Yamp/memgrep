@@ -5,11 +5,10 @@ from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 
 
-
 async def search_memes(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Search matching memes in the database and return the bot respons text."""
     args = context.args
-    conn = sqlite3.connect('files.db')
+    conn = sqlite3.connect("files.db")
     c = conn.cursor()
     table = c.execute("SELECT * FROM files")
     data = table.fetchall()
@@ -31,16 +30,15 @@ async def search_memes(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
                 match = str(d[5])[m.start:m.end]
                 s = match
                 res += [s]
-        msgs += ['|'.join(res) + str(d[6])]
+        msgs += ["|".join(res) + str(d[6])]
         msgs = sorted(msgs, key=lambda x: len(x), reverse=True)
 
 
-    print(f'sending message {msgs}')
 
-    await update.message.reply_text(f'Hello {msgs}')
+    await update.message.reply_text(f"Hello {msgs}")
 
 async def hello(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    await update.message.reply_text(f'Hello {update.effective_user.first_name}')
+    await update.message.reply_text(f"Hello {update.effective_user.first_name}")
 
 
 def main():

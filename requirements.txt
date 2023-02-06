@@ -1,4 +1,4 @@
 --extra-index-url https://download.pytorch.org/whl/cu117
+clip-interrogator==0.4.1
 torch==1.13.1+cu117
 torchvision==0.14.1+cu117
-clip-interrogator==0.4.1

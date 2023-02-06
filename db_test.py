@@ -1,10 +1,8 @@
 import sqlite3
-from pprint import pprint
 
-from bot_scrape import create_sqlite_table
 
 def check_tables():
-    conn = sqlite3.connect('files.db')
+    conn = sqlite3.connect("files.db")
     c = conn.cursor()
     c.execute("SELECT name FROM sqlite_master WHERE type='table';")
     tables = c.fetchall()
@@ -13,12 +11,10 @@ def check_tables():
     return tables
 
 def main():
-    print(check_tables())
 
-    conn = sqlite3.connect('files.db')
+    conn = sqlite3.connect("files.db")
     c = conn.cursor()
     c.execute("SELECT * FROM files")
-    pprint(c.fetchall())
     conn.commit()
     conn.close()
 
