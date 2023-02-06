@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+import sys
+
 import fire
+
+sys.path.extend([".", "..", "../.."])
 
 from data.redis_db import MemDB, SearchRequest
 
