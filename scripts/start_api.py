@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+import sys
+
+sys.path.extend([".", "..", "../.."])
+
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 

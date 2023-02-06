@@ -192,7 +192,12 @@ class MemDB:
             + f"LIMIT 0 {request.max_results}\n",
             # f"SORTBY 1 @dt DESC",
         )
-        assert res[0] == 1
+        if res[0] == 0:
+            assert len(res) == 1
+            return []
+
+        assert res[0] == (len(res) - 1) / 2
+
         records = []
         for _doc, mem in chunked(res[1:], 2):
             d = dict(chunked(mem, 2))  # noqa
