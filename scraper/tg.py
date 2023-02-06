@@ -43,7 +43,7 @@ class TelegramScraper:
     async def get_messages(
             self,
             chat_id: str,
-            limit: int | None = 1000,
+            limit: int | None = 10000,
     ) -> list:
         chat = await self.client.get_entity(chat_id)
 
