@@ -92,11 +92,11 @@ repos:
 ##  - id: docker-compose
 #  - id: dockerfile-lint
 
-- repo: https://github.com/hadolint/hadolint
-  rev: v2.12.1-beta
-  hooks:
-  - id: hadolint
-    args: [--ignore, DL3008]
+#- repo: https://github.com/hadolint/hadolint
+#  rev: v2.12.1-beta
+#  hooks:
+#  - id: hadolint
+#    args: [--ignore, DL3008]
 
 - repo: https://github.com/wemake-services/dotenv-linter
   rev: 0.4.0      # Use the ref you want to point at

@@ -45,8 +45,17 @@ class ImageDB:
             message_id: str,
             img_num: int,
             img_type: Literal["jpg", "png"],
-    ) -> bytes:
-        return self.client.get_object(
-            bucket_name=chat_id,
-            object_name=f"{message_id}_{img_num}.{img_type}",
-        ).data
+    ) -> bytes | None:
+        response = None
+        try:
+            response = self.client.get_object(
+                bucket_name=chat_id,
+                object_name=f"{message_id}_{img_num}.{img_type}",
+            )
+            return bytes(response.data)
+        except Exception:  # noqa
+            return None
+        finally:
+            if response is not None:
+                response.close()
+                response.release_conn()

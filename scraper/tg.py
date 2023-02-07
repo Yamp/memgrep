@@ -76,10 +76,18 @@ class TelegramScraper:
 
         return messages
 
-    async def process_message(self, message: Message, chat_slug: str):
+    async def process_message(self, chat_slug: str, message: Message):
         """Process message and save it to storage."""
+        img = self.search_db(chat_slug, message)
+        if img is not None:
+            logger.info(f"Image from {message.id} already exists in database.")
+            return
+
         logger.info(f"Downloading image from {message.id}...")
         path = await self.download_img(message)
+        if path is None:
+            return
+
         logger.info(f"Saving image from {message.id}...")
         self.save_message(message, path, chat_slug=chat_slug)
         path.unlink()
@@ -89,12 +97,31 @@ class TelegramScraper:
     async def download_img(
             self,
             message: Message,
-    ) -> Path:
+    ) -> Path | None:
         """Download image from message and return path to it."""
         p = Path(settings.TMP_DIR) / f"./images/{message.id}.jpg"
 
-        path = await self.client.download_media(message.media, str(p.absolute()))
+        path = await self.client.download_media(message, file=str(p.absolute()))
+        if path is None:
+            logger.warning(f"Failed to download image from {message.id}.")
+        path = await self.client.download_media(message.photo, file=str(p.absolute()))
+        if path is None:
+            logger.warning(f"Failed to download photo from {message.id}.")
+            return None
+
         return Path(path)
+
+    def search_db(
+            self,
+            chat_id: str,
+            message: Message,
+    ) -> bytes | None:
+        return self.storage.get_image(
+            chat_id=chat_id,
+            message_id=message.id,
+            img_num=0,
+            img_type="jpg",
+        )
 
     def save_message(
             self,
@@ -141,4 +168,4 @@ class TelegramScraper:
             logger.info(f"{message.id}: {message.text}")
             if message.photo:
                 logger.info(f"Found image in {message.id}.")
-                await self.process_message(message, chat_slug)
+                await self.process_message(chat_slug, message)
