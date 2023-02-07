@@ -45,23 +45,36 @@ class TelegramScraper:
             self,
             chat_id: str,
             limit: int | None = 10000,
-    ) -> list:
+            chunk_size: int = 100,
+    ) -> list[Message]:
         logger.info(f"Getting messages from {chat_id}...")
         chat = await self.client.get_entity(chat_id)
 
-        posts = await self.client(GetHistoryRequest(
-            peer=chat,
-            limit=limit,
-            offset_date=None,
-            offset_id=0,
-            max_id=0,
-            min_id=0,
-            add_offset=0,
-            hash=0),
-        )
-        logger.info(f"Got {len(posts.messages)} messages from {chat_id}.")
+        messages = []
+        offset = 0
+        for i in range(limit // chunk_size + 1):
+            logger.info(f"Getting {chunk_size} messages from {chat_id}...")
+            posts = await self.client(GetHistoryRequest(
+                peer=chat,
+                limit=chunk_size,
+                offset_date=None,
+                offset_id=0,
+                max_id=0,
+                min_id=0,
+                add_offset=offset,
+                hash=0),
+            )
+            new_messages = list(posts.messages)
+            offset += len(new_messages)
+            messages.extend(new_messages)
 
-        return posts.messages
+            if not new_messages:
+                logger.info(f"Finished getting messages from {chat_id} in {i} iterations.")
+                break
+
+        logger.info(f"Got total of {len(messages)} messages from {chat_id}.")
+
+        return messages
 
     async def process_message(self, message: Message, chat_slug: str):
         """Process message and save it to storage."""
