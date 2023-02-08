@@ -11,6 +11,7 @@ import settings
 from data.minio_db import ImageDB
 from data.redis_db import ImageRecord, MemDB
 from extraction.ocr import OCRExtractor
+from extraction.caption import ImageCaptioner
 from utils.funcs import ifnone
 
 
@@ -27,6 +28,7 @@ class TelegramScraper:
         self.storage: ImageDB = storage
         self.index: MemDB = index
         self.ocr: OCRExtractor = OCRExtractor()
+        self.image_captioner: ImageCaptioner = ImageCaptioner()
         self.client: TelegramClient = TelegramClient(
             session=settings.SESSION_NAME,
             api_id=settings.API_ID,
@@ -148,7 +150,7 @@ class TelegramScraper:
             msg_text=ifnone(message.text, ""),
             ocr_rus=self.ocr.extract(path),
             ocr_eng="",
-            semantic_data="",
+            semantic_data=self.image_captioner.caption(path),
             semantic_vector=[],
             reactions=[],
             comments=[],
