@@ -6,8 +6,8 @@ sys.path.extend([".", "..", "../.."])
 import fire
 from loguru import logger
 
-from data.minio_db import ImageDB
-from data.redis_db import MemDB
+from data.minio_db import MinioDB
+from data.redis_db import RedisDB
 from scraper.tg import TelegramScraper
 
 
@@ -15,9 +15,9 @@ def index(
         chat_id: str,
 ):
     logger.info("Initializing storage...")
-    storage = ImageDB()
+    storage = MinioDB()
     logger.info("Initializing index...")
-    index = MemDB()
+    index = RedisDB()
     logger.info("Initializing scraper...")
     scraper = TelegramScraper(storage, index)
 

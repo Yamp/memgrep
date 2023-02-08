@@ -9,7 +9,7 @@ A Python project for indexing and searching memes using OCR, fuzzy search and se
 2. Create new venv and activate it: `python3.9 -m venv venv && source venv/bin/activate`
 3. Install requirements: `pip3 install -r requirements.txt`
 
-## Poetry (TBD) 
+## Poetry (TBD)
 **
 
 ## Dependencies

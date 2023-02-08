@@ -48,7 +48,7 @@ class ImageRecord(BaseModel):
     post_link: str
 
 
-class MemDB:
+class RedisDB:
     """ The meme database.
 
     The table name is tg_memes.

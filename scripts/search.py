@@ -5,12 +5,12 @@ import fire
 
 sys.path.extend([".", "..", "../.."])
 
-from data.redis_db import MemDB, SearchRequest
+from data.redis_db import RedisDB, SearchRequest
 
 
 def search(query: str) -> None:
     """Search for memes by text."""
-    index = MemDB()
+    index = RedisDB()
     res = index.search(SearchRequest(query=query))
     for r in res:
         print(r)  # noqa

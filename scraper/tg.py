@@ -1,5 +1,4 @@
 #
-from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
 from loguru import logger
@@ -8,8 +7,9 @@ from telethon.tl.functions.messages import GetHistoryRequest
 from telethon.tl.types import Message
 
 import settings
-from data.minio_db import ImageDB
-from data.redis_db import ImageRecord, MemDB
+from data.data_storage import DataStorage
+from data.redis_db import ImageRecord
+from entities.message import PMessage
 from extraction.ocr import OCRExtractor
 from utils.funcs import ifnone
 
@@ -19,22 +19,16 @@ class TelegramScraper:
 
     def __init__(
             self,
-            storage: ImageDB,
-            index: MemDB,
+            storage: DataStorage,
     ):
         logger.info("Initializing scraper...")
-        self.pool: ProcessPoolExecutor = ProcessPoolExecutor()
-        self.storage: ImageDB = storage
-        self.index: MemDB = index
+        self.storage: DataStorage = storage
         self.ocr: OCRExtractor = OCRExtractor()
         self.client: TelegramClient = TelegramClient(
-            session=settings.SESSION_NAME,
-            api_id=settings.API_ID,
-            api_hash=settings.API_HASH,
+            session=settings.TG_SESSION_NAME,
+            api_id=settings.TG_API_ID,
+            api_hash=settings.TG_API_HASH,
         )
-
-        if self.index.create_db():
-            logger.info("Index database created for the first time.")
 
     def run(self, chat_id: str):
         self.client.start()
@@ -163,9 +157,16 @@ class TelegramScraper:
             chat_slug: str,
     ):
         messages = await self.get_messages(chat_slug, limit=10000)
+        msgs = [PMessage.from_tg(m) for m in messages]
+        self.storage.save_messages(msgs=msgs)
+        logger.info(f"Saved {len(msgs)} messages to storage.")
 
-        for message in messages:
-            logger.info(f"{message.id}: {message.text}")
-            if message.photo:
-                logger.info(f"Found image in {message.id}.")
-                await self.process_message(chat_slug, message)
+    # async def scrape_images(
+    #         self,
+    #         chat_slug: str,
+    # ):
+    #     for message in messages:
+    #         logger.info(f"{message.id}: {message.text}")
+    #         if message.photo:
+    #             logger.info(f"Found image in {message.id}.")
+    #             await self.process_message(chat_slug, message)

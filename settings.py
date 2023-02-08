@@ -9,12 +9,21 @@ environ.Env.read_env()
 # False if not in os.environ
 DEBUG = env("DEBUG")
 
-# These example values won't work. You must get your own api_id and
-# api_hash from https://my.telegram.org, under API Development.
-API_ID = env("API_ID")
-API_HASH = env("API_HASH")
-SESSION_NAME = env("SESSION_NAME")
-BOT_TOKEN = env("BOT_TOKEN")
+# postgres params
+PG_URL = env("PG_URL")
+
+# s3 params
+S3_ENDPOINT = env("S3_ENDPOINT")
+S3_REGION = env("S3_REGION")
+S3_BUCKET = env("S3_BUCKET")
+S3_ACCESS_KEY = env("S3_ACCESS_KEY")
+S3_SECRET_KEY = env("S3_SECRET_KEY")
+
+# telegram params
+TG_API_ID = env("TG_API_ID")
+TG_API_HASH = env("TG_API_HASH")
+TG_SESSION_NAME = env("TG_SESSION_NAME")
+TG_BOT_TOKEN = env("TG_BOT_TOKEN")
 
 REDIS_URL = env("REDIS_URL")
 

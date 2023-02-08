@@ -10,12 +10,12 @@ from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 
 import settings
-from data.minio_db import ImageDB
-from data.redis_db import MemDB, SearchRequest
+from data.minio_db import MinioDB
+from data.redis_db import RedisDB, SearchRequest
 from scraper.tg import TelegramScraper
 
-index = MemDB()
-storage = ImageDB()
+index = RedisDB()
+storage = MinioDB()
 
 
 async def search_memes(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -44,7 +44,7 @@ async def hello(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 
 def main():
-    app = ApplicationBuilder().token(settings.BOT_TOKEN).build()
+    app = ApplicationBuilder().token(settings.TG_BOT_TOKEN).build()
     app.add_handler(CommandHandler("hello", hello))
     app.add_handler(CommandHandler("search", search_memes))
     app.add_handler(CommandHandler("index", index_memes))

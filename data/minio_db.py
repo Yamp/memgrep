@@ -6,7 +6,7 @@ from minio import Minio
 import settings
 
 
-class ImageDB:
+class MinioDB:
     def __init__(
             self,
             url: str = settings.MINIO_URL,
