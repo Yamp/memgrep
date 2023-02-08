@@ -23,5 +23,6 @@ class ImageCaptioner:
 
 if __name__ == '__main__':
     ic = ImageCaptioner()
-    image_path = 'images/meme1.jpg'
-    print(ic.caption(image_path))
+    while True:
+        image_path = input('Enter image path: ')
+        print(ic.caption(image_path))
