@@ -1,10 +1,13 @@
+from __future__ import annotations
+
 import datetime
-from typing import Literal
+from typing import TYPE_CHECKING, Literal
 
 from pydantic import BaseModel
-from telethon.tl.types import Message
+from telethon.tl.types import Channel, Message
 
-from data.postgre_db import TgMessage
+if TYPE_CHECKING:
+    from data.postgre_db import TgMessage
 
 
 class PChat(BaseModel):
@@ -14,19 +17,25 @@ class PChat(BaseModel):
 
 class PMessage(BaseModel):
     id: int
-    text: str
+    text: str | None
     date: datetime.datetime
     message_id: int
-    chat: PChat
+    chat: PChat | None
 
     @classmethod
-    def from_tg(cls, message: Message):
+    def from_tg(
+            cls,
+            message: Message,
+            channel: Channel,
+    ):
+        chat = PChat(id=channel.id, name=channel.username)
+
         return cls(
-            id=message.message_id,
+            id=message.id,
             text=message.text,
             date=message.date,
-            message_id=message.message_id,
-            chat=message.chat,
+            message_id=message.id,
+            chat=chat,
         )
 
     @classmethod
@@ -45,3 +54,4 @@ class PImage(BaseModel):
     data: bytes
     extension: Literal["jpg", "png"]
     msg: PMessage | None = None
+    num: int = 0

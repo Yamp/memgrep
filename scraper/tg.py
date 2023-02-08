@@ -4,12 +4,12 @@ from pathlib import Path
 from loguru import logger
 from telethon import TelegramClient
 from telethon.tl.functions.messages import GetHistoryRequest
-from telethon.tl.types import Message
+from telethon.tl.types import Channel, Message
 
 import settings
 from data.data_storage import DataStorage
 from data.redis_db import ImageRecord
-from entities.message import PMessage
+from entities.message import PImage, PMessage
 from extraction.ocr import OCRExtractor
 from utils.funcs import ifnone
 
@@ -107,15 +107,9 @@ class TelegramScraper:
 
     def search_db(
             self,
-            chat_id: str,
-            message: Message,
+            img: PImage,
     ) -> bytes | None:
-        return self.storage.get_image(
-            chat_id=chat_id,
-            message_id=message.id,
-            img_num=0,
-            img_type="jpg",
-        )
+        return self.storage.download_image(img)
 
     def save_message(
             self,
@@ -125,15 +119,16 @@ class TelegramScraper:
     ):
         print(f"Saving img {path}")  # noqa
 
-        self.storage.save_image(
-            image=path.read_bytes(),
-            chat_id=chat_slug,
-            message_id=message.id,
-            img_num=0,
-            img_type="jpg",
+        img = PImage(
+            id=message.to_id.channel_id + message.id,
+            data=path.read_bytes(),
+            extension=path.suffix,
+            num=0,
         )
 
-        self.index.add_record(ImageRecord(
+        self.storage.upload_image(img)
+
+        self.storage.index.add_record(ImageRecord(
             id=message.to_id.channel_id + message.id,
             message_id=message.id,
             chat=chat_slug,
@@ -157,7 +152,9 @@ class TelegramScraper:
             chat_slug: str,
     ):
         messages = await self.get_messages(chat_slug, limit=10000)
-        msgs = [PMessage.from_tg(m) for m in messages]
+        chan: Channel = await self.client.get_entity(chat_slug)
+
+        msgs = [PMessage.from_tg(m, chan) for m in messages]
         self.storage.save_messages(msgs=msgs)
         logger.info(f"Saved {len(msgs)} messages to storage.")
 

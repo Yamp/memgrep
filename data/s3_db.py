@@ -3,6 +3,8 @@ from io import BytesIO
 import boto3
 from loguru import logger
 
+import settings
+
 
 class S3DB:
     """S3DB is a class used to access S3 service.
@@ -12,11 +14,11 @@ class S3DB:
 
     def __init__(
             self,
-            endpoint: str,
-            region: str,
-            bucket: str,
-            access_key: str,
-            secret_key: str,
+            endpoint: str = settings.S3_ENDPOINT,
+            region: str = settings.S3_REGION,
+            bucket: str = settings.S3_BUCKET,
+            access_key: str = settings.S3_ACCESS_KEY,
+            secret_key: str = settings.S3_SECRET_KEY,
     ):
         self.bucket = bucket
         self.client = boto3.client(
@@ -50,7 +52,7 @@ class S3DB:
         )
         logger.info(f"File '{name}' uploaded successfully to '{self.bucket}'.")
 
-    def get_file(self, file_name: str) -> bytes | None:
+    def download_file(self, file_name: str) -> bytes | None:
         try:
             return self.client.get_object(Bucket=self.bucket, Key=file_name)["Body"].read()
         except self.client.exceptions.NoSuchKey:
@@ -73,5 +75,5 @@ if __name__ == "__main__":
         name="test.txt",
         data=b"test",
     )
-    logger.info(s3_db.get_file("test.txt"))
+    logger.info(s3_db.download_file("test.txt"))
     logger.info(s3_db.check_file_exists("test.txt"))
