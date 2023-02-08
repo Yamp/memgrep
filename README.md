@@ -1,19 +1,25 @@
 A Python project for indexing and searching memes using OCR, fuzzy search and semantic search.
 
 # Installation
+0. Clone this repository: `git clone https://github.com/Yamp/memgrep`
+1. Navigate to the cloned repository: `cd memgrep`
 
-**Install Pipenv**
-1. Clone this repository: `git clone https://github.com/Yamp/memgrep`
-2. Navigate to the cloned repository: `cd memgrep`
-3. Install dependencies from lockfile: `pipenv sync`
+## Reqirements
+1. (Ubuntu) `sudo apt install python3.9 python3.9-venv python3.9-dev`
+2. Create new venv and activate it: `python3.9 -m venv venv && source venv/bin/activate`
+3. Install requirements: `pip3 install -r requirements.txt`
 
-# Dependencies
+## Poetry (TBD) 
+**
+
+## Dependencies
 
 * Redis
 * Minio
 
+
 # Usage
 
-* Activate the Pipenv environment: pipenv shell
+* Activate environment: TBD
 * Run the API server: python bot_api.py
 * Run the scraping script: python bot_scrape.py _channel_
