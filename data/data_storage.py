@@ -26,7 +26,7 @@ class DataStorage:
         self.index: RedisDB = index
         self.pg_db: PostgresDB = pg_db
 
-        if self.index.create_db():
+        if self.index is not None and self.index.create_db():
             logger.info("Index database created for the first time.")
 
         if self.pg_db.create_db():
