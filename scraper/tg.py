@@ -1,4 +1,3 @@
-#
 from pathlib import Path
 
 from loguru import logger
@@ -33,6 +32,11 @@ class TelegramScraper:
     def run(self, chat_id: str):
         self.client.start()
         self.client.loop.run_until_complete(self.scrape_messages(chat_id))
+        self.client.run_until_disconnected()
+
+    def run_task(self, f):
+        self.client.start()
+        self.client.loop.run_until_complete(f)
         self.client.run_until_disconnected()
 
     async def get_messages(
@@ -150,20 +154,28 @@ class TelegramScraper:
     async def scrape_messages(
             self,
             chat_slug: str,
+            limit: int = 10000,
     ):
-        messages = await self.get_messages(chat_slug, limit=10000)
+        c: Channel = await self.client.get_entity(chat_slug)
+        c_id = c.id
+        saved_messages: list[PMessage] = self.storage.get_messages(c_id)
+        logger.info(f"Messages in database for this chat: {len(saved_messages)}")
+
+        messages = await self.get_messages(chat_slug, limit=limit)
         chan: Channel = await self.client.get_entity(chat_slug)
 
+        logger.info(f"Saving {len(messages)} messages to storage...")
         msgs = [PMessage.from_tg(m, chan) for m in messages]
         self.storage.save_messages(msgs=msgs)
         logger.info(f"Saved {len(msgs)} messages to storage.")
 
-    # async def scrape_images(
-    #         self,
-    #         chat_slug: str,
-    # ):
-    #     for message in messages:
-    #         logger.info(f"{message.id}: {message.text}")
-    #         if message.photo:
-    #             logger.info(f"Found image in {message.id}.")
-    #             await self.process_message(chat_slug, message)
+    async def scrape_images(
+            self,
+            chat_slug: str,
+    ):
+        pass
+        # for message in messages:
+        #     logger.info(f"{message.id}: {message.text}")
+        #     if message.photo:
+        #         logger.info(f"Found image in {message.id}.")
+        #         await self.process_message(chat_slug, message)

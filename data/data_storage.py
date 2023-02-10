@@ -1,6 +1,6 @@
 from loguru import logger
 
-from data.postgre_db import PostgresDB
+from data.pg.postgre_db import PostgresDB
 from data.redis_db import RedisDB
 from data.s3_db import S3DB
 from entities.message import PImage, PMessage
@@ -35,6 +35,10 @@ class DataStorage:
     def save_messages(self, msgs: list[PMessage]) -> None:
         """Get image from the storage."""
         return self.pg_db.add_messages(msgs)
+
+    def get_messages(self, chat_id: int) -> list[PMessage]:
+        """Get image from the storage."""
+        return self.pg_db.get_messages(chat_id)
 
     def save_images(self, imgs: list[PImage]) -> None:
         """Get image from the storage."""

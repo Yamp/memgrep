@@ -2,7 +2,7 @@
 import sys
 
 from data.data_storage import DataStorage
-from data.postgre_db import PostgresDB
+from data.pg.postgre_db import PostgresDB
 from data.s3_db import S3DB
 
 sys.path.extend([".", "..", "../.."])
@@ -15,7 +15,7 @@ from scraper.tg import TelegramScraper
 
 
 def index(
-        chat_id: str,
+        chat_username: str,
 ):
     logger.info("Initializing s3...")
     s3 = S3DB()
@@ -31,7 +31,7 @@ def index(
     scraper = TelegramScraper(storage)
 
     logger.info("Scraping messages...")
-    scraper.run(chat_id)
+    scraper.run_task(scraper.scrape_messages(chat_username, limit=10000))
     logger.info("Done!")
 
 if __name__ == "__main__":

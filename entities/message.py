@@ -7,7 +7,7 @@ from pydantic import BaseModel
 from telethon.tl.types import Channel, Message
 
 if TYPE_CHECKING:
-    from data.postgre_db import TgMessage
+    from data.pg.postgre_db import TgMessage
 
 
 class PChat(BaseModel):
@@ -45,7 +45,7 @@ class PMessage(BaseModel):
             text=message.text,
             date=message.dt,
             message_id=message.message_id,
-            chat=PChat(id=message.chat.id, name=message.chat.name),
+            chat=PChat(id=message.chat.chat_id, name=message.chat.chat_name),
         )
 
 
