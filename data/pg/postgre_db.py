@@ -211,6 +211,12 @@ class PostgresDB:
                 ),
             )
 
+    def image_ids(self) -> list[int]:
+        """Return a list of all images from the database."""
+        with Session(self.engine) as session:
+            ti = list(session.execute(select(TgImage)).scalars().all())
+            return [t.image_id for t in ti]
+
 
 if __name__ == "__main__":
     db = PostgresDB(

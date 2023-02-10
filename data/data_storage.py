@@ -49,6 +49,21 @@ class DataStorage:
         """Download image from the storage."""
         return self.s3.download_file(f"{img.msg.chat.id}/{img.msg.id}/{img.num}.{img.extension}")
 
+    def get_all_images(
+            self,
+            limit: int = 10,
+    ) -> dict[int, PImage]:
+        """Get image from the storage."""
+        logger.info(f"Getting {limit} images from the storage.")
+        res = {}
+        ids = self.pg_db.image_ids()
+        for id in ids[:limit]:
+            print(id)  # noqa
+            res[id] = PImage(
+                id=id,
+                data=self.s3.download_file(f"{id}.jpg"), extension="jpg", num=0, msg=None)
+        return res
+
     # def get_unrecognized_images(self) -> list[PImage]:
     #     """Get image from the storage."""
     #     return self.index.get_unrecognized_images()
