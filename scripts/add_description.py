@@ -14,7 +14,9 @@ from extraction.caption import ImageCaptioner
 def recognise_image(id: str, data: bytes) -> str:
     path = Path(f"{id}.jpg")
     path.write_bytes(data)
-    return ImageCaptioner().caption(path)
+    res = ImageCaptioner().caption(path)
+    path.unlink()
+    return res
 
 
 def main():
