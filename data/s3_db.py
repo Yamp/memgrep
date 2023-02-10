@@ -53,7 +53,7 @@ class S3DB:
         )
         logger.info(f"File '{name}' uploaded successfully to '{self.bucket}'.")
 
-    def download_file(self, file_name: str) -> bytes | None:
+    def download_file(self, file_name: str) -> bytes :
         try:
             return self.client.get_object(Bucket=self.bucket, Key=file_name)["Body"].read()
         except self.client.exceptions.NoSuchKey:

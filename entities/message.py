@@ -17,10 +17,10 @@ class PChat(BaseModel):
 
 class PMessage(BaseModel):
     id: int
-    text: str | None
+    text: str
     date: datetime.datetime
     message_id: int
-    chat: PChat | None
+    chat: PChat
 
     @classmethod
     def from_tg(
@@ -53,7 +53,7 @@ class PImage(BaseModel):
     id: int
     data: bytes
     extension: Literal["jpg", "png"]
-    msg: PMessage | None = None
+    msg: PMessage = None
     num: int = 0
 
     def url(self):

@@ -9,8 +9,8 @@ import settings
 from data.data_storage import DataStorage
 from data.redis_db import ImageRecord
 from entities.message import PImage, PMessage
-from extraction.ocr import OCRExtractor
 from extraction.caption import ImageCaptioner
+from extraction.ocr import OCRExtractor
 from utils.funcs import ifnone
 
 
@@ -44,7 +44,7 @@ class TelegramScraper:
     async def get_messages(
             self,
             chat_id: str,
-            limit: int | None = 10000,
+            limit: int  = 10000,
             chunk_size: int = 100,
     ) -> list[Message]:
         logger.info(f"Getting messages from {chat_id}...")
@@ -97,7 +97,7 @@ class TelegramScraper:
     async def download_img(
             self,
             message: Message,
-    ) -> Path | None:
+    ) -> Path :
         """Download image from message and return path to it."""
         p = Path(settings.TMP_DIR) / f"./images/{message.id}.jpg"
 
@@ -114,7 +114,7 @@ class TelegramScraper:
     def search_db(
             self,
             img: PImage,
-    ) -> bytes | None:
+    ) -> bytes :
         return self.storage.download_image(img)
 
     def save_message(

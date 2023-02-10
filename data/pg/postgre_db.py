@@ -33,7 +33,7 @@ class PostgresDB:
 
     def use_or_create_session(
             self,
-            session: Session | None = None,
+            session: Session = None,
     ) -> Session:
         """Create a session or use an existing one."""
         return session or Session(self.engine)
@@ -45,7 +45,7 @@ class PostgresDB:
     def add_messages(
             self,
             messages: list[PMessage],
-            session: Session | None = None,
+            session: Session  = None,
     ):
         """Add messages to the database."""
         logger.info("Adding chats and messages to the database.")
@@ -105,7 +105,7 @@ class PostgresDB:
     def get_or_create_chat(
             self,
             chat: PChat,
-            session: Session | None = None,
+            session: Session  = None,
     ):
         """Add a chat to the database if it does not exist."""
         with Session(self.engine) as session:

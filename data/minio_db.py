@@ -45,7 +45,7 @@ class MinioDB:
             message_id: str,
             img_num: int,
             img_type: Literal["jpg", "png"],
-    ) -> bytes | None:
+    ) -> bytes:
         response = None
         try:
             response = self.client.get_object(

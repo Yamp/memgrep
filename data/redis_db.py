@@ -14,10 +14,10 @@ import settings
 
 class SearchRequest(BaseModel):
     query: str
-    dt_start: datetime | None = None
-    dt_end: datetime | None = None
-    chats: list[str] | None = None
-    senders: list[str] | None = None
+    dt_start: datetime  = None
+    dt_end: datetime  = None
+    chats: list[str]  = None
+    senders: list[str]  = None
 
     # search options
     max_results: int = 5
