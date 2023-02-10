@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+import sys
+
+sys.path.extend([".", "..", "../.."])
 
 from pathlib import Path
 
@@ -36,6 +39,7 @@ def main():
         caption = recognise_image(str(id), img.data)
         logger.info(f"Caption: {caption}")
         # storage.set_image_caption(id, caption)
+
 
 if __name__ == "__main__":
     main()
