@@ -219,13 +219,18 @@ class PostgresDB:
     def add_recognition(self, img_id: int, recognition: str) -> None:
         """Add a recognition to the database."""
         with Session(self.engine) as session:
-            session.add(
-                Recognitions(
-                    image_id=img_id,
-                    blip=recognition,
-                ),
-            )
-            session.commit()
+            try:
+                session.add(
+                    Recognitions(
+                        image_id=img_id,
+                        blip=recognition,
+                    ),
+                )
+                session.commit()
+            except Exception as e:
+                logger.exception("Failed to add recognition to the database")
+                logger.exception(e)
+                session.rollback()
 
 
 if __name__ == "__main__":
