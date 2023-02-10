@@ -10,6 +10,7 @@ from data.data_storage import DataStorage
 from data.redis_db import ImageRecord
 from entities.message import PImage, PMessage
 from extraction.ocr import OCRExtractor
+from extraction.caption import ImageCaptioner
 from utils.funcs import ifnone
 
 
@@ -23,6 +24,7 @@ class TelegramScraper:
         logger.info("Initializing scraper...")
         self.storage: DataStorage = storage
         self.ocr: OCRExtractor = OCRExtractor()
+        self.image_captioner: ImageCaptioner = ImageCaptioner()
         self.client: TelegramClient = TelegramClient(
             session=settings.TG_SESSION_NAME,
             api_id=settings.TG_API_ID,
@@ -141,7 +143,7 @@ class TelegramScraper:
             msg_text=ifnone(message.text, ""),
             ocr_rus=self.ocr.extract(path),
             ocr_eng="",
-            semantic_data="",
+            semantic_data=self.image_captioner.caption(path),
             semantic_vector=[],
             reactions=[],
             comments=[],
