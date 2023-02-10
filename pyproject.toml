@@ -58,7 +58,8 @@ extend-ignore = [
   "E741",
   "E402",
   "S108",
-  "PLR0913"
+  "PLR0913",
+  "T201"
 ]
 extend-select = [
   "C",

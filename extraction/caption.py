@@ -25,3 +25,4 @@ if __name__ == "__main__":
     ic = ImageCaptioner()
     while True:
         image_path = input("Enter image path: ")
+        print(ic.caption(image_path))
