@@ -45,7 +45,7 @@ class PostgresDB:
     def add_messages(
             self,
             messages: list[PMessage],
-            session: Session  = None,
+            session: Session = None,
     ):
         """Add messages to the database."""
         logger.info("Adding chats and messages to the database.")
@@ -105,7 +105,7 @@ class PostgresDB:
     def get_or_create_chat(
             self,
             chat: PChat,
-            session: Session  = None,
+            session: Session = None,
     ):
         """Add a chat to the database if it does not exist."""
         with Session(self.engine) as session:
@@ -146,7 +146,6 @@ class PostgresDB:
             )
             session.add(o)
             session.commit()
-
 
     def add_images(self, images: list[PImage]):
         """Add a list of images to the database."""
@@ -194,28 +193,39 @@ class PostgresDB:
             )
             return list(session.execute(images).scalars().all())
 
-    def add_recognition(
-            self,
-            image_id: int,
-            extractor: Literal["tesseract_rus", "tesseract_eng", "easy_ocr", "blip"],
-            text: str,
-    ):
-        """Add a recognition to the database."""
-        with Session(self.engine) as session:
-            session.execute(
-                Recognitions.__table__.insert().values(
-                    {
-                        "image_id": image_id,
-                        extractor: text,
-                    },
-                ),
-            )
+    # def add_recognition(
+    #         self,
+    #         image_id: int,
+    #         extractor: Literal["tesseract_rus", "tesseract_eng", "easy_ocr", "blip"],
+    #         text: str,
+    # ):
+    #     """Add a recognition to the database."""
+    #     with Session(self.engine) as session:
+    #         session.execute(
+    #             Recognitions.__table__.insert().values(
+    #                 {
+    #                     "image_id": image_id,
+    #                     extractor: text,
+    #                 },
+    #             ),
+    #         )
 
     def image_ids(self) -> list[int]:
         """Return a list of all images from the database."""
         with Session(self.engine) as session:
             ti = list(session.execute(select(TgImage)).scalars().all())
             return [t.image_id for t in ti]
+
+    def add_recognition(self, img_id: int, recognition: str) -> None:
+        """Add a recognition to the database."""
+        with Session(self.engine) as session:
+            session.add(
+                Recognitions(
+                    image_id=img_id,
+                    blip=recognition,
+                ),
+            )
+            session.commit()
 
 
 if __name__ == "__main__":

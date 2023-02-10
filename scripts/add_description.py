@@ -37,6 +37,8 @@ def main():
         logger.info(f"Recognising image {id}...")
         caption = recognise_image(str(id), img.data)
         logger.info(f"Caption: {caption}")
+        pg.add_recognition(int(id), caption)
+
         # storage.set_image_caption(id, caption)
 
 
