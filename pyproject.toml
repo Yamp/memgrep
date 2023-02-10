@@ -35,7 +35,7 @@ sqlalchemy = "^2.0.2"
 telethon = "==1.16.1"
 
 [tool.ruff]
-# not enabled ANN101, EM, RUF, D, ERA, T20, A, N
+# not enabled ANN101, EM, RUF, D, ERA, T20, A, Nh
 extend-ignore = [
   "D107",
   "D100",
