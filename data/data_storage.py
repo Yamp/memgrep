@@ -40,16 +40,10 @@ class DataStorage:
         """Get image from the storage."""
         return self.pg_db.get_messages(chat_id)
 
-    def save_images(self, imgs: list[PImage]) -> None:
+    def save_image(self, img: PImage) -> None:
         """Get image from the storage."""
-        return self.pg_db.add_images(imgs)
-
-    def upload_image(self, img: PImage) -> None:
-        """Upload image to the storage."""
-        self.s3.upload_file(
-            f"{img.msg.chat.id}/{img.msg.id}/{img.num}.{img.extension}",
-            img.data,
-        )
+        self.pg_db.add_image(img, img.url())
+        self.s3.upload_file(img.url(), img.data)
 
     def download_image(self, img: PImage) -> bytes:
         """Download image from the storage."""

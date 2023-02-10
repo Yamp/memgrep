@@ -55,3 +55,6 @@ class PImage(BaseModel):
     extension: Literal["jpg", "png"]
     msg: PMessage | None = None
     num: int = 0
+
+    def url(self):
+        return f"{self.id}.{self.extension}"

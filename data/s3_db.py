@@ -4,6 +4,7 @@ import boto3
 from loguru import logger
 
 import settings
+from entities.message import PImage
 
 
 class S3DB:
@@ -58,6 +59,9 @@ class S3DB:
         except self.client.exceptions.NoSuchKey:
             logger.info(f"File '{file_name}' not found in '{self.bucket}'.")
             return None
+
+    def make_img_url(self, img: PImage) -> str:
+        return f"{img.msg.id}/{img.num}.{img.extension}"
 
 
 if __name__ == "__main__":

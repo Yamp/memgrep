@@ -31,7 +31,7 @@ def index(
     scraper = TelegramScraper(storage)
 
     logger.info("Scraping messages...")
-    scraper.run_task(scraper.scrape_messages(chat_username, limit=10000))
+    scraper.run_task(scraper.scrape_messages(chat_username, limit=200))
     logger.info("Done!")
 
 if __name__ == "__main__":

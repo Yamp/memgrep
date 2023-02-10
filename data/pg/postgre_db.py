@@ -67,18 +67,16 @@ class PostgresDB:
             existing_messages_ids = {message.message_id for message in existing_messages}
 
             logger.info("Adding messages to the database...")
-            messages_to_add = []
-            for _i, message in enumerate(messages):
-                if message.message_id not in existing_messages_ids:
-                    messages_to_add.append(
-                        TgMessage(
-                            message_id=message.message_id,
-                            chat_id=message.chat.id,
-                            text=message.text,
-                            dt=message.date,
-                        ),
-                    )
-
+            messages_to_add = [
+                TgMessage(
+                    message_id=message.message_id,
+                    chat_id=message.chat.id,
+                    text=message.text,
+                    dt=message.date,
+                )
+                for message in messages
+                if message.message_id not in existing_messages_ids
+            ]
             logger.info("Bulk saving...")
             session.bulk_save_objects(messages_to_add)
             logger.info("Committing...")
@@ -137,6 +135,18 @@ class PostgresDB:
                     ],
                 ),
             )
+
+    def add_image(self, img: PImage, url: str):
+        """Add a list of images to the database."""
+        with Session(self.engine) as session:
+            o = TgImage(
+                message_id=4000,
+                image_id=img.id,
+                s3_url=url,
+            )
+            session.add(o)
+            session.commit()
+
 
     def add_images(self, images: list[PImage]):
         """Add a list of images to the database."""

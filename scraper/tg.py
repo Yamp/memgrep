@@ -76,10 +76,10 @@ class TelegramScraper:
 
     async def process_message(self, chat_slug: str, message: Message):
         """Process message and save it to storage."""
-        img = self.search_db(chat_slug, message)
-        if img is not None:
-            logger.info(f"Image from {message.id} already exists in database.")
-            return
+        # img = self.search_db(chat_slug, message)
+        # if img is not None:
+        #     logger.info(f"Image from {message.id} already exists in database.")
+        #     return
 
         logger.info(f"Downloading image from {message.id}...")
         path = await self.download_img(message)
@@ -126,11 +126,11 @@ class TelegramScraper:
         img = PImage(
             id=message.to_id.channel_id + message.id,
             data=path.read_bytes(),
-            extension=path.suffix,
+            extension=path.suffix[1:],
             num=0,
         )
 
-        self.storage.upload_image(img)
+        self.storage.save_image(img)
 
         self.storage.index.add_record(ImageRecord(
             id=message.to_id.channel_id + message.id,
@@ -162,20 +162,7 @@ class TelegramScraper:
         logger.info(f"Messages in database for this chat: {len(saved_messages)}")
 
         messages = await self.get_messages(chat_slug, limit=limit)
-        chan: Channel = await self.client.get_entity(chat_slug)
+        # chan: Channel = await self.client.get_entity(chat_slug)
 
-        logger.info(f"Saving {len(messages)} messages to storage...")
-        msgs = [PMessage.from_tg(m, chan) for m in messages]
-        self.storage.save_messages(msgs=msgs)
-        logger.info(f"Saved {len(msgs)} messages to storage.")
-
-    async def scrape_images(
-            self,
-            chat_slug: str,
-    ):
-        pass
-        # for message in messages:
-        #     logger.info(f"{message.id}: {message.text}")
-        #     if message.photo:
-        #         logger.info(f"Found image in {message.id}.")
-        #         await self.process_message(chat_slug, message)
+        for m in messages:
+            await self.process_message(chat_slug, m)
