@@ -13,10 +13,10 @@ from data.s3_db import S3DB
 from extraction.caption import ImageCaptioner
 
 
-def recognise_image(id: str, data: bytes) -> str:
+def recognise_image(id: str, data: bytes, ic: ImageCaptioner) -> str:
     path = Path(f"{id}.jpg")
     path.write_bytes(data)
-    res = ImageCaptioner().caption(path)
+    res = ic.caption(path)
     path.unlink()
     return res
 
@@ -33,9 +33,10 @@ def main():
     storage = DataStorage(s3, None, pg)
     res = storage.get_all_images()
 
+    ic = ImageCaptioner()
     for id, img in res.items():
         logger.info(f"Recognising image {id}...")
-        caption = recognise_image(str(id), img.data)
+        caption = recognise_image(str(id), img.data, ic)
         logger.info(f"Caption: {caption}")
         pg.add_recognition(int(id), caption)
 
