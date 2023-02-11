@@ -30,23 +30,23 @@ class ImageRecord(BaseModel):
     # basic info
     message_id: int
     chat: str
-    sender_id: int
-    dt: datetime
-    msg_text: str
+    sender_id: int = None
+    dt: datetime = None
+    msg_text: str = None
 
     # deep features
-    ocr_rus: str
-    ocr_eng: str
-    semantic_data: str
-    semantic_vector: list[float]
+    ocr_rus: str = None
+    ocr_eng: str = None
+    semantic_data: str = None
+    semantic_vector: list[float] = []
 
     # additional info
-    comments: list[str]
-    reactions: list[str]
+    comments: list[str] = []
+    reactions: list[str] = []
 
     # links
     data_link: str
-    post_link: str
+    post_link: str = None
 
 
 class RedisDB:
