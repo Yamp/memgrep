@@ -1,0 +1,6 @@
+transformers==4.15.0
+tokenizers==0.10.3
+torch==1.13.1
+torchvision==0.14.1
+blip-vit==0.0.3
+clip-interrogator==0.4.3
