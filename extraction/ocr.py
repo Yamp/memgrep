@@ -11,14 +11,18 @@ from pytesseract import pytesseract
 
 
 class OCRExtractor:
-    def __init__(self):
-        self.dict_en = enchant.Dict("en_US")
+    def __init__(self, check_dict=True):
+        if not check_dict:
+            self._check_dict = lambda w: True
+        else:
+            self.dict_en = enchant.Dict("en_US")
+            self._check_dict = lambda word: len(word) >= 2 and self.dict_en.check(word)
 
     def extract(self, image: Path) -> str:
         words = ' '.join(self.extract_easy_ocr(image)).split()
         words = [w.translate(str.maketrans('', '', string.punctuation)) for w in words]
         words = [w for w in words if w.isalpha()]
-        words = [w for w in words if self.dict_en.check(w)]
+        words = [w for w in words if self._check_dict(w)]
         return ' '.join(words).lower()
 
     def extract_dir(self, image_dir: Path) -> dict:
@@ -35,14 +39,14 @@ class OCRExtractor:
     def extract_tesseract(
             self,
             image: Path,
-            lang: str = "rus",
+            lang: str = "en",
     ) -> str:
         return pytesseract.image_to_string(Image.open(image), lang=lang)
 
     def extract_easy_ocr(
             self,
             image: Path,
-            lang: str = "rus",
+            lang: str = "en",
     ) -> list[str]:
         """Extract text from image using easyOCR."""
         try:
@@ -50,14 +54,13 @@ class OCRExtractor:
         except ImportError:
             warnings.warn("easyOCR is not installed.")
             return ""
-
-        reader = easyocr.Reader(["en"])
+        reader = easyocr.Reader([lang])
         words = reader.readtext(Image.open(image), detail=0)
         return words
 
 
 if __name__ == '__main__':
-    ocr = OCRExtractor()
+    ocr = OCRExtractor(check_dict=True)
     while True:
         image_path = input("Enter image(s) path: ")
         if not os.path.exists(image_path):
