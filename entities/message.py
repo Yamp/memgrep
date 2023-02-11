@@ -17,7 +17,7 @@ class PChat(BaseModel):
 
 class PMessage(BaseModel):
     id: int
-    text: str
+    text: str | None
     date: datetime.datetime
     message_id: int
     chat: PChat
