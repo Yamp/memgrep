@@ -141,13 +141,13 @@ class PostgresDB:
         """Add a list of images to the database."""
         logger.info("Adding image to the database...")
         with Session(self.engine) as session:
-            TgImage(
+            img = TgImage(
                 message_id=4000,
                 image_id=img.id,
                 s3_url=url,
             )
             try:
-                session.add(TgImage)
+                session.add(img)
                 session.commit()
             except IntegrityError:
                 logger.warning("Already exists image...")
@@ -229,7 +229,7 @@ class PostgresDB:
         """Add a recognition to the database."""
         with Session(self.engine) as session:
             try:
-                session.merge(
+                session.add(
                     Recognitions(
                         image_id=img_id,
                         blip=recognition,

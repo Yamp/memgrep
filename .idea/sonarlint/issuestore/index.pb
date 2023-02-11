@@ -22,8 +22,6 @@ I
 experimants/get_images.py,d/5/d5fac3945193945a37f566fe1a8375c1e1575f65
 4
 .env,3/c/3c84dcdc6bbe3d7817c49dcdc327b926fea1808a
-=
-scripts/db.py,f/f/ffbc0c71b25931a2f779f64e1b00607125242f3f
 D
 scripts/start_api.py,4/4/445440c89a3b03667474e2257096ac2fc4fe36a8
 C
