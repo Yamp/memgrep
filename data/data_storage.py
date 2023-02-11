@@ -34,6 +34,7 @@ class DataStorage:
 
     def save_messages(self, msgs: list[PMessage]) -> None:
         """Get image from the storage."""
+        logger.info(f"Saving {len(msgs)} messages to the postgres.")
         return self.pg_db.add_messages(msgs)
 
     def get_messages(self, chat_id: int) -> list[PMessage]:

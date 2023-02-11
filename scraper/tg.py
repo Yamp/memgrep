@@ -45,7 +45,7 @@ class TelegramScraper:
     async def get_messages(
             self,
             chat_id: str,
-            limit: int  = 10000,
+            limit: int = 10000,
             chunk_size: int = 100,
     ) -> list[Message]:
         logger.info(f"Getting messages from {chat_id}...")
@@ -98,7 +98,7 @@ class TelegramScraper:
     async def download_img(
             self,
             message: Message,
-    ) -> Path :
+    ) -> Path:
         """Download image from message and return path to it."""
         p = Path(settings.TMP_DIR) / f"./images/{message.id}.jpg"
 
@@ -115,7 +115,7 @@ class TelegramScraper:
     def search_db(
             self,
             img: PImage,
-    ) -> bytes :
+    ) -> bytes:
         return self.storage.download_image(img)
 
     def save_message(
@@ -165,6 +165,10 @@ class TelegramScraper:
         logger.info(f"Messages in database for this chat: {len(saved_messages)}")
 
         messages = await self.get_messages(chat_slug, limit=limit)
+        self.storage.save_messages([
+            PMessage.from_tg(m, c)
+            for m in messages
+        ])
         # chan: Channel = await self.client.get_entity(chat_slug)
 
         for m in messages:
