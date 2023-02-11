@@ -18,5 +18,5 @@ telethon
 urllib3
 sqlalchemy
 boto3
-psycopg2
+psycopg2-binary
 pyenchant
