@@ -11,6 +11,7 @@ import settings
 from data.pg.models import Base, Recognitions, TgChat, TgImage, TgMessage
 from entities.message import PChat, PImage, PMessage
 
+from pprint import pprint
 
 class PostgresDB:
     """A class to work with Postgres database.
@@ -137,12 +138,12 @@ class PostgresDB:
                 ),
             )
 
-    def add_image(self, img: PImage, url: str):
+    def add_image(self, msg: TgMessage, img: PImage, url: str):
         """Add a list of images to the database."""
         logger.info("Adding image to the database...")
         with Session(self.engine) as session:
             img = TgImage(
-                message_id=4000,
+                message_id=msg.id,
                 image_id=img.id,
                 s3_url=url,
             )

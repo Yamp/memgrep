@@ -3,6 +3,7 @@ from loguru import logger
 from data.pg.postgre_db import PostgresDB
 from data.redis_db import RedisDB
 from data.s3_db import S3DB
+from data.pg.models import TgMessage
 from entities.message import PImage, PMessage
 
 
@@ -41,9 +42,9 @@ class DataStorage:
         """Get image from the storage."""
         return self.pg_db.get_messages(chat_id)
 
-    def save_image(self, img: PImage) -> None:
+    def save_image(self, msg: TgMessage, img: PImage) -> None:
         """Get image from the storage."""
-        self.pg_db.add_image(img, img.url())
+        self.pg_db.add_image(msg, img, img.url())
         self.s3.upload_file(img.url(), img.data)
 
     def download_image(self, img: PImage) -> bytes:

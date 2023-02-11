@@ -36,10 +36,10 @@ class TgMessage(Base):
     It is used to avoid scraping the same message twice.
 
     Fields:
-    1. message_id: str - unique message id
+    1. message_id: int - unique message id
     2. chat_id: int - unique chat id (foreign key)
-    3. message_text: str - message text
-    4. message_date: datetime - message date
+    3. text: str - message text
+    4. dt: datetime - message date
     """
 
     __tablename__ = "tg_messages"
