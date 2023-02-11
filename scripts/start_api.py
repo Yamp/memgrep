@@ -10,9 +10,9 @@ from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 
 import settings
+
 # from data.minio_db import MinioDB
 from data.redis_db import RedisDB, SearchRequest
-from scraper.tg import TelegramScraper
 
 index = RedisDB()
 # storage = MinioDB()

@@ -4,8 +4,8 @@ from typing import Literal
 
 from loguru import logger
 from sqlalchemy import create_engine, select
-from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import Session
 
 import settings
 from data.pg.models import Base, Recognitions, TgChat, TgImage, TgMessage
@@ -240,6 +240,7 @@ class PostgresDB:
     def get_all_recognitions(self) -> list[Recognitions]:
         """Return a list of all recognitions from the database."""
         with Session(self.engine) as session:
+            # return Recognitions.query.options(joinedload(Recognitions.image, Recognitions.image.message)).all()
             return list(session.execute(select(Recognitions)).scalars().all())
 
 

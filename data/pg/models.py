@@ -49,8 +49,8 @@ class TgMessage(Base):
     text = mapped_column(String)
     dt = mapped_column(DateTime)
 
-    chat = relationship("TgChat", back_populates="messages")
-    images = relationship("TgImage", back_populates="message")
+    chat = relationship("TgChat", back_populates="messages", lazy="joined")
+    images = relationship("TgImage", back_populates="message", lazy="joined")
 
     def __repr__(self):
         return (f"<"
@@ -79,8 +79,8 @@ class TgImage(Base):
     message_id = mapped_column(Integer, ForeignKey("tg_messages.id"))
     s3_url = mapped_column(String, nullable=True)
 
-    message = relationship("TgMessage", back_populates="images")
-    recognitions = relationship("Recognitions", back_populates="image")
+    message = relationship("TgMessage", back_populates="images", lazy="joined")
+    recognitions = relationship("Recognitions", back_populates="image", lazy="joined")
 
     def __repr__(self):
         return (f"<"
@@ -111,7 +111,7 @@ class Recognitions(Base):
     easy_ocr = mapped_column(String, nullable=True)
     blip = mapped_column(String, nullable=True)
 
-    image = relationship("TgImage", back_populates="recognitions")
+    image = relationship("TgImage", back_populates="recognitions", lazy="joined")
 
     def __repr__(self):
         return (f"<"
