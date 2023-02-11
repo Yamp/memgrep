@@ -4,6 +4,7 @@ from typing import Literal
 
 from loguru import logger
 from sqlalchemy import create_engine, select
+from psycopg2.errors import UniqueViolation
 from sqlalchemy.orm import Session
 
 import settings
@@ -139,29 +140,37 @@ class PostgresDB:
     def add_image(self, img: PImage, url: str):
         """Add a list of images to the database."""
         with Session(self.engine) as session:
-            o = TgImage(
-                message_id=4000,
-                image_id=img.id,
-                s3_url=url,
-            )
-            session.add(o)
-            session.commit()
+            try:
+                o = TgImage(
+                    message_id=4000,
+                    image_id=img.id,
+                    s3_url=url,
+                )
+                session.add(o)
+                session.commit()
+            except UniqueViolation:
+                print("Already exists image #", img.id)
+                pass
 
     def add_images(self, images: list[PImage]):
         """Add a list of images to the database."""
         with Session(self.engine) as session:
-            session.execute(
-                TgImage.__table__.insert().values(
-                    [
-                        {
-                            "message_id": image.msg.id,
-                            "image_id": image.image_id,
-                            "image_url": image.s3_url,
-                        }
-                        for image in images
-                    ],
-                ),
-            )
+            try:
+                session.execute(
+                    TgImage.__table__.insert().values(
+                        [
+                            {
+                                "message_id": image.msg.id,
+                                "image_id": image.image_id,
+                                "image_url": image.s3_url,
+                            }
+                            for image in images
+                        ],
+                    ),
+                )
+            except UniqueViolation:
+                print("Already exists image #", image.image_id)
+                pass
 
     def get_unrecognized_images(
             self,
