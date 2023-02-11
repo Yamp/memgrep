@@ -95,7 +95,8 @@ class RedisDB:
                 NumericField("dt", sortable=True),
                 TextField("chat", sortable=True),
                 TextField("msg_text", sortable=True),
-                TextField("ocr_rus", sortable=True),
+                TextField("blip", sortable=True),
+                TextField("easy_ocr", sortable=True),
             ],
         )
         # FT.CREATE tg_memes
@@ -195,8 +196,7 @@ class RedisDB:
 
         """
         res = self.redis.ft("tg_memes").search(Query(
-            f"@ocr_rus:{request.query} "
-            f"@ocr_eng:{request.query} "
+            f"@easy_ocr:{request.query} "
             f"@blip:{request.query}",
         ))
 
