@@ -6,6 +6,7 @@ minio
 more-itertools
 pycocotools
 pydantic
+tesseract-ocr
 pytesseract
 python-environ
 python-telegram-bot
