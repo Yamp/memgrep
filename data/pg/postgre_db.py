@@ -223,7 +223,7 @@ class PostgresDB:
     def image_ids(self) -> list[int]:
         """Return a list of all images from the database."""
         with Session(self.engine) as session:
-            ti = list(session.execute(select(TgImage)).scalars().all().unique())
+            ti = list(session.execute(select(TgImage)).scalars().unique().all())
             return [t.image_id for t in ti]
 
     def add_recognition(self, img_id: int, recognition: str) -> None:
