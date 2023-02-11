@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 import sys
+sys.path.extend([".", "..", "../.."])
+
 
 from data.data_storage import DataStorage
 from data.pg.postgre_db import PostgresDB
 from data.s3_db import S3DB
-
-sys.path.extend([".", "..", "../.."])
 
 import fire
 from loguru import logger
@@ -20,7 +20,7 @@ def index(
     logger.info("Initializing s3...")
     s3 = S3DB()
     logger.info("Initializing redis...")
-    redis = RedisDB()
+    redis = None
     logger.info("Initializing postgres...")
     pg = PostgresDB()
 

@@ -7,10 +7,10 @@ from telethon.tl.types import Channel, Message
 
 import settings
 from data.data_storage import DataStorage
-from data.redis_db import ImageRecord
+# from data.redis_db import ImageRecord
 from entities.message import PImage, PMessage
-from extraction.caption import ImageCaptioner
-from extraction.ocr import OCRExtractor
+# from extraction.caption import ImageCaptioner
+# from extraction.ocr import OCRExtractor
 from utils.funcs import ifnone
 
 
@@ -23,8 +23,8 @@ class TelegramScraper:
     ):
         logger.info("Initializing scraper...")
         self.storage: DataStorage = storage
-        self.ocr: OCRExtractor = OCRExtractor()
-        self.image_captioner: ImageCaptioner = ImageCaptioner()
+        # self.ocr: OCRExtractor = OCRExtractor()
+        # self.image_captioner: ImageCaptioner = ImageCaptioner()
         self.client: TelegramClient = TelegramClient(
             session=settings.TG_SESSION_NAME,
             api_id=settings.TG_API_ID,
@@ -134,22 +134,22 @@ class TelegramScraper:
 
         self.storage.save_image(img)
 
-        self.storage.index.add_record(ImageRecord(
-            id=message.to_id.channel_id + message.id,
-            message_id=message.id,
-            chat=chat_slug,
-            sender_id=ifnone(message.from_id, 0),
-            dt=message.date,
-            msg_text=ifnone(message.text, ""),
-            ocr_rus=self.ocr.extract(path),
-            ocr_eng="",
-            semantic_data=self.image_captioner.caption(path),
-            semantic_vector=[],
-            reactions=[],
-            comments=[],
-            data_link=str(path.absolute()),
-            post_link=f"https://t.me/{chat_slug}/{message.id}",
-        ))
+        # self.storage.index.add_record(ImageRecord(
+        #     id=message.to_id.channel_id + message.id,
+        #     message_id=message.id,
+        #     chat=chat_slug,
+        #     sender_id=ifnone(message.from_id, 0),
+        #     dt=message.date,
+        #     msg_text=ifnone(message.text, ""),
+        #     ocr_rus=self.ocr.extract(path),
+        #     ocr_eng="",
+        #     semantic_data=self.image_captioner.caption(path),
+        #     semantic_vector=[],
+        #     reactions=[],
+        #     comments=[],
+        #     data_link=str(path.absolute()),
+        #     post_link=f"https://t.me/{chat_slug}/{message.id}",
+        # ))
 
         logger.info(f"Saved message {message.id} to file {path}, storage and index.")
 
