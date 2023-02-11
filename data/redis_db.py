@@ -38,7 +38,7 @@ class ImageRecord(BaseModel):
     ocr_rus: str = None
     ocr_eng: str = None
     semantic_data: str = None
-    semantic_vector: list[float] = None
+    # semantic_vector: list[float] = None
 
     # additional info
     comments: list[str] = []
@@ -132,7 +132,7 @@ class RedisDB:
 
         d = record.dict()
         d["dt"] = d["dt"].timestamp()
-        d["semantic_vector"] = ",".join(map(str, d["semantic_vector"]))
+        # d["semantic_vector"] = ",".join(map(str, d["semantic_vector"]))
         d["comments"] = ",".join(d["comments"])
         d["reactions"] = ",".join(d["reactions"])
         d["msg_text"] = d["msg_text"] or "None"
@@ -216,7 +216,7 @@ class RedisDB:
         records = []
         for doc in res.docs:
             d = doc.__dict__  # noqa
-            d["semantic_vector"] = parse_list(getattr(d, "semantic_vector", [])) ,
+            # d["semantic_vector"] = parse_list(getattr(d, "semantic_vector", [])) ,
             d["reactions"] = parse_list(getattr(d, "reactions", []))
             d["comments"] = parse_list(getattr(d, "comments", []))
             d["id"] = int(d["id"].removeprefix("doc:"))
