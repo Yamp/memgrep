@@ -15,3 +15,5 @@ salesforce-lavis
 telethon
 urllib3
 sqlalchemy
+boto3
+psycopg2
