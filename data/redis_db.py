@@ -38,15 +38,15 @@ class ImageRecord(BaseModel):
     ocr_rus: str = None
     ocr_eng: str = None
     semantic_data: str = None
-    semantic_vector: list[float] = []
+    semantic_vector: list[float] = None
 
     # additional info
     comments: list[str] = []
     reactions: list[str] = []
 
     # links
-    data_link: str
-    post_link: str = None
+    data_link: str = None
+    post_link: str
 
 
 class RedisDB:
