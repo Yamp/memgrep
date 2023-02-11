@@ -1,21 +1,20 @@
 #!/usr/bin/env python3
 
 import sys
-
 from loguru import logger
 
 sys.path.extend([".", "..", "../.."])
 
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
-
 import settings
 
-# from data.minio_db import MinioDB
 from data.redis_db import RedisDB, SearchRequest
 
 index = RedisDB()
-# storage = MinioDB()
+
+if index is not None and index.create_db():
+    logger.info("Index database created for the first time.")
 
 
 async def search_memes(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
