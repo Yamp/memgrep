@@ -216,9 +216,9 @@ class RedisDB:
         records = []
         for doc in res.docs:
             d = doc.__dict__  # noqa
-            # d["semantic_vector"] = parse_list(d["semantic_vector"])
-            # d["reactions"] = parse_list(d["reactions"])
-            # d["comments"] = parse_list(d["comments"])
+            d["semantic_vector"] = parse_list(d["semantic_vector"])
+            d["reactions"] = parse_list(d["reactions"])
+            d["comments"] = parse_list(d["comments"])
             d["id"] = int(d["id"].removeprefix("doc:"))
             records += [ImageRecord(**d)]
 
