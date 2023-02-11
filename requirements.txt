@@ -12,7 +12,8 @@ python-environ
 python-telegram-bot
 redis
 requests
-salesforce-lavis
+clip-interrogator
+easyocr
 telethon
 urllib3
 sqlalchemy
