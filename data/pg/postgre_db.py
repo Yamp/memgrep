@@ -149,8 +149,9 @@ class PostgresDB:
             try:
                 session.add(img)
                 session.commit()
-            except IntegrityError:
+            except IntegrityError as e:
                 logger.warning("Already exists image...")
+                logger.warning(e)
 
     def add_images(self, images: list[PImage]):
         """Add a list of images to the database."""
