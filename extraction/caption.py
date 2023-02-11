@@ -48,13 +48,13 @@ class ImageCaptioner:
             model_type=model_type, is_eval=True, device=self.device)
         return True
 
-    def _init_ci(self, model_name='ViT-L-14/openai'):
+    def _init_ci(self, model_name='ViT-L-14/openai', chunk_size=512):
         try:
             import clip_interrogator as ci
         except ImportError:
             warnings.warn("easyOCR is not installed.")
             return False
-        self.config = ci.Config(device=self.device, clip_model_name=model_name)
+        self.config = ci.Config(device=self.device, clip_model_name=model_name, chunk_size=chunk_size)
         self.ci = ci.Interrogator(self.config)
         return True
 
