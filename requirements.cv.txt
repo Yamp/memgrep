@@ -14,3 +14,4 @@ Cython==0.29.33
 pycocoevalcap==1.2
 pycocotools==2.0.6
 scikit-image==0.19.3
+PyWavelets==1.4.1

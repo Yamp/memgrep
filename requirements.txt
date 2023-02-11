@@ -36,7 +36,6 @@ pyparsing==3.0.9
 python-bidi==0.4.2
 python-dateutil==2.8.2
 python-environ==0.4.54
-PyWavelets==1.4.1
 PyYAML==6.0
 redis==4.5.1
 regex==2022.10.31
