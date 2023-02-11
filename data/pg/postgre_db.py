@@ -169,7 +169,7 @@ class PostgresDB:
                     ),
                 )
             except UniqueViolation:
-                print("Already exists image #", image.image_id)
+                print("Already exists image...")
                 pass
 
     def get_unrecognized_images(
