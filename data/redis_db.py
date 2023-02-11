@@ -196,8 +196,7 @@ class RedisDB:
 
         """
         res = self.redis.ft("tg_memes").search(Query(
-            f"@easy_ocr:{request.query} "
-            f"@blip:{request.query}",
+            f"@easy_ocr:{request.query} | @blip:{request.query}",
         ))
 
         # res = self.redis.execute_command(
