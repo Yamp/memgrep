@@ -3,9 +3,8 @@ import sys
 
 from fire import Fire
 
-from data.redis_db import RedisDB
-
 sys.path.extend([".", "..", "../.."])
+from data.redis_db import RedisDB
 
 
 from loguru import logger
