@@ -5,8 +5,9 @@ A Python project for indexing and searching memes using OCR, fuzzy search and se
 1. Navigate to the cloned repository: `cd memgrep`
 
 ## Reqirements
-1. (Ubuntu) `sudo apt install python3.9 python3.9-venv python3.9-dev`
-2. Create new venv and activate it: `python3.9 -m venv venv && source venv/bin/activate`
+0. Install rust `curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh`
+1. (Ubuntu) `sudo apt install python3.10-full`
+2. Create new venv and activate it: `python3.10 -m venv venv && source venv/bin/activate`
 3. Install requirements: `pip3 install -r requirements.txt`
 
 ## Poetry (TBD)
