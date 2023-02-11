@@ -247,7 +247,9 @@ class PostgresDB:
         """Return a list of all recognitions from the database."""
         with Session(self.engine) as session:
             # return Recognitions.query.options(joinedload(Recognitions.image, Recognitions.image.message)).all()
-            return list(session.execute(select(Recognitions)).scalars().all())
+            return list(
+                session.execute(select(Recognitions)).unique().scalars().all()
+                )
 
 
 if __name__ == "__main__":

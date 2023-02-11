@@ -42,6 +42,7 @@ def main():
         item.unlink()
 
         logger.info(f"Caption: {caption}")
+        logger.info(f"OCR: {text}")
         pg.add_recognition(int(id), caption, text)
 
         # storage.set_image_caption(id, caption)
