@@ -233,6 +233,11 @@ class PostgresDB:
                 logger.exception(e)
                 session.rollback()
 
+    def get_all_recognitions(self) -> list[Recognitions]:
+        """Return a list of all recognitions from the database."""
+        with Session(self.engine) as session:
+            return list(session.execute(select(Recognitions)).scalars().all())
+
 
 if __name__ == "__main__":
     db = PostgresDB(

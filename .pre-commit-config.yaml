@@ -70,7 +70,7 @@ repos:
 #    entry: poetry update
 
 - repo: https://github.com/charliermarsh/ruff-pre-commit
-  rev: v0.0.241
+  rev: v0.0.245
   hooks:
   - id: ruff
 

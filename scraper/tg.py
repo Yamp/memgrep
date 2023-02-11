@@ -7,11 +7,12 @@ from telethon.tl.types import Channel, Message
 
 import settings
 from data.data_storage import DataStorage
+
 # from data.redis_db import ImageRecord
 from entities.message import PImage, PMessage
+
 # from extraction.caption import ImageCaptioner
 # from extraction.ocr import OCRExtractor
-from utils.funcs import ifnone
 
 
 class TelegramScraper:

@@ -60,6 +60,9 @@ class TgMessage(Base):
                 f"message_date={self.dt}"
                 f")>")
 
+    def post_link(self):
+        return f"https://t.me/{self.chat.chat_name}/{self.message_id}"
+
 
 class TgImage(Base):
     """This table stores scraped telegram images.

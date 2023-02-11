@@ -1,16 +1,15 @@
 #!/usr/bin/env python3
 import sys
+
 sys.path.extend([".", "..", "../.."])
 
-
-from data.data_storage import DataStorage
-from data.pg.postgre_db import PostgresDB
-from data.s3_db import S3DB
 
 import fire
 from loguru import logger
 
-from data.redis_db import RedisDB
+from data.data_storage import DataStorage
+from data.pg.postgre_db import PostgresDB
+from data.s3_db import S3DB
 from scraper.tg import TelegramScraper
 
 

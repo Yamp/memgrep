@@ -10,6 +10,7 @@ from redis.commands.search.field import NumericField, TextField
 from redis.commands.search.query import Query
 
 import settings
+from data.pg.models import Recognitions
 
 
 class SearchRequest(BaseModel):
@@ -194,7 +195,9 @@ class RedisDB:
 
         """
         res = self.redis.ft("tg_memes").search(Query(
-            f"@ocr_rus:{request.query}",
+            f"@ocr_rus:{request.query} "
+            f"@ocr_eng:{request.query} "
+            f"@blip:{request.query}",
         ))
 
         # res = self.redis.execute_command(
@@ -221,6 +224,21 @@ class RedisDB:
             records += [ImageRecord(**d)]
 
         return records
+
+    def add_recognitions(self, recs: list[Recognitions]):
+        """Add recognitions to the table."""
+        for rec in recs:
+            img = rec.image
+            self.redis.hset(f"doc:{rec.image_id}", mapping={
+                "message_id": img.message_id,
+                "chat": img.chat,
+                "post_link": img.message.post_link(),
+                "ocr_rus": rec.tesseract_rus,
+                "ocr_eng": rec.tesseract_eng,
+                "easy_ocr": rec.easy_ocr,
+                "blip": rec.blip,
+            })
+        return
 
 def parse_list(s: str):
     return json.loads(s) if s else []
