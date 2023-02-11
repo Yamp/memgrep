@@ -37,7 +37,7 @@ def main():
     for id, img in res.items():
         logger.info(f"Recognising image {id}...")
         item = save_image(id, img.data)
-        caption = ic.get_caption(item)
+        caption = ic.caption(item)
         text = ocr.extract(item)
         item.unlink()
 
