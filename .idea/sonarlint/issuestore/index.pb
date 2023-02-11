@@ -32,5 +32,3 @@ C
 data/minio_db.py,a/d/ad7644a5576e8b7c150821442fefaecc0e3bc121
 J
 scripts/add_description.py,f/a/faadb886e2319087e1a0467881e7555543d9f1e3
-@
-requirements.txt,1/9/19359a61ae2446b51b549167b014da2fcf265768
