@@ -2,6 +2,7 @@ import os
 import string
 import warnings
 from pathlib import Path
+from pprint import pprint
 
 import enchant
 from PIL import Image
@@ -51,7 +52,7 @@ class OCRExtractor:
             import easyocr
         except ImportError:
             warnings.warn("easyOCR is not installed.")
-            return ""
+            return []
         reader = easyocr.Reader([lang])
         words = reader.readtext(Image.open(image), detail=0)
         return words
@@ -62,8 +63,8 @@ if __name__ == "__main__":
     while True:
         image_path = input("Enter image(s) path: ")
         if not os.path.exists(image_path):
-            pass
+            pprint(f"Incorrect path {image_path}")
         elif os.path.isdir(image_path):
-            pass
+            pprint(ocr.extract_dir(image_path))
         else:
-            pass
+            pprint(ocr.extract(image_path))
