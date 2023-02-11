@@ -4,8 +4,8 @@ from typing import Literal
 
 from loguru import logger
 from sqlalchemy import create_engine, select
-from psycopg2.errors import UniqueViolation
 from sqlalchemy.orm import Session
+from sqlalchemy.exc import IntegrityError
 
 import settings
 from data.pg.models import Base, Recognitions, TgChat, TgImage, TgMessage
@@ -140,17 +140,12 @@ class PostgresDB:
     def add_image(self, img: PImage, url: str):
         """Add a list of images to the database."""
         with Session(self.engine) as session:
-            try:
-                o = TgImage(
+            session.merge(TgImage(
                     message_id=4000,
                     image_id=img.id,
                     s3_url=url,
-                )
-                session.add(o)
-                session.commit()
-            except UniqueViolation:
-                print("Already exists image #", img.id)
-                pass
+                ))
+
 
     def add_images(self, images: list[PImage]):
         """Add a list of images to the database."""
@@ -168,7 +163,7 @@ class PostgresDB:
                         ],
                     ),
                 )
-            except UniqueViolation:
+            except IntegrityError:
                 print("Already exists image...")
                 pass
 
