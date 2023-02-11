@@ -139,13 +139,18 @@ class PostgresDB:
 
     def add_image(self, img: PImage, url: str):
         """Add a list of images to the database."""
+        logger.info("Adding image to the database...")
         with Session(self.engine) as session:
-            session.merge(TgImage(
-                    message_id=4000,
-                    image_id=img.id,
-                    s3_url=url,
-                ))
-
+            TgImage(
+                message_id=4000,
+                image_id=img.id,
+                s3_url=url,
+            )
+            try:
+                session.add(TgImage)
+                session.commit()
+            except IntegrityError:
+                logger.warning("Already exists image...")
 
     def add_images(self, images: list[PImage]):
         """Add a list of images to the database."""
@@ -219,7 +224,6 @@ class PostgresDB:
         with Session(self.engine) as session:
             ti = list(session.execute(select(TgImage)).scalars().all())
             return [t.image_id for t in ti]
-
 
     def add_recognition(self, img_id: int, recognition: str) -> None:
         """Add a recognition to the database."""

@@ -18,8 +18,6 @@ C
 data/s3_db.py,2/e/2e248daa4546fd900eb21cecfe229f79683bc13e
 A
 scripts/search.py,a/4/a4d70e9fff684f422382ebccb416c31231921cbb
-A
-scripts/scrape.py,a/5/a57bc9365d7edffddcdfb18b587784e719eb7d12
 I
 experimants/get_images.py,d/5/d5fac3945193945a37f566fe1a8375c1e1575f65
 4
@@ -28,8 +26,6 @@ I
 scripts/db.py,f/f/ffbc0c71b25931a2f779f64e1b00607125242f3f
 D
 scripts/start_api.py,4/4/445440c89a3b03667474e2257096ac2fc4fe36a8
-=
-scraper/tg.py,9/d/9d02443671b667ef8b25a1a69254e8b735fafa5a
 C
 entities/message.py,0/e/0ea1afaeed346a44375ff56cf6c365d97b61a9f8
 @
