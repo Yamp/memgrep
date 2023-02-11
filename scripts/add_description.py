@@ -11,15 +11,12 @@ from data.data_storage import DataStorage
 from data.pg.postgre_db import PostgresDB
 from data.s3_db import S3DB
 from extraction.caption import ImageCaptioner
+from extraction.ocr import OCRExtractor
 
-
-def recognise_image(id: str, data: bytes, ic: ImageCaptioner) -> str:
+def save_image(id: str, data: bytes) -> Path:
     path = Path(f"{id}.jpg")
     path.write_bytes(data)
-    res = ic.caption(path)
-    path.unlink()
-    return res
-
+    return path
 
 def main():
     logger.info("Initializing s3...")
@@ -31,14 +28,21 @@ def main():
 
     logger.info("Creating storage...")
     storage = DataStorage(s3, None, pg)
-    res = storage.get_all_images()
+    res = storage.get_all_images(limit=1000)
 
     ic = ImageCaptioner()
+    ocr = OCRExtractor()
+
+
     for id, img in res.items():
         logger.info(f"Recognising image {id}...")
-        caption = recognise_image(int(id), img.data, ic)
+        item = save_image(id, img.data)
+        caption = ic.get_caption(item)
+        text = ocr.extract(item)
+        item.unlink()
+
         logger.info(f"Caption: {caption}")
-        pg.add_recognition(int(id), caption)
+        pg.add_recognition(int(id), caption, text)
 
         # storage.set_image_caption(id, caption)
 
