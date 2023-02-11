@@ -1,27 +1,25 @@
 import os
+import string
 from pathlib import Path
 from pprint import pprint
 import warnings
 
 from PIL import Image
+
+import enchant
 from pytesseract import pytesseract
 
 
 class OCRExtractor:
     def __init__(self):
-        pass
-        # self.image = image
+        self.dict_en = enchant.Dict("en_US")
 
     def extract(self, image: Path) -> str:
-        s = "|".join([
-            self.extract_tesseract(image, lang="rus"),
-            self.extract_tesseract(image, lang="eng"),
-            str(self.extract_easy_ocr(image)),
-        ])
-        s = " ".join(s.split())
-        s = "".join([c for c in s if c.isalpha() or c.isdigit() or c == " "])
-        s = s.lower()
-        return s
+        words = ' '.join(self.extract_easy_ocr(image)).split()
+        words = [w.translate(str.maketrans('', '', string.punctuation)) for w in words]
+        words = [w for w in words if w.isalpha()]
+        words = [w for w in words if self.dict_en.check(w)]
+        return ' '.join(words).lower()
 
     def extract_dir(self, image_dir: Path) -> dict:
         if not os.path.isdir(image_dir):
@@ -45,7 +43,7 @@ class OCRExtractor:
             self,
             image: Path,
             lang: str = "rus",
-    ) -> str:
+    ) -> list[str]:
         """Extract text from image using easyOCR."""
         try:
             import easyocr
@@ -53,8 +51,9 @@ class OCRExtractor:
             warnings.warn("easyOCR is not installed.")
             return ""
 
-        reader = easyocr.Reader(["ru", "en"])
-        return reader.readtext(Image.open(image))
+        reader = easyocr.Reader(["en"])
+        words = reader.readtext(Image.open(image), detail=0)
+        return words
 
 
 if __name__ == '__main__':

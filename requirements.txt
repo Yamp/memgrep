@@ -19,3 +19,4 @@ urllib3
 sqlalchemy
 boto3
 psycopg2
+pyenchant
