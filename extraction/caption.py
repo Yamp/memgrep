@@ -63,14 +63,18 @@ class ImageCaptioner:
         caption_str = self.model.generate({"image": image})
         return caption_str
 
-    def _caption_ci(self, image: Image, mode='best') -> str:
+    def _caption_ci(self, image: Image, mode='caption') -> str:
         if mode == 'best':
             return self.ci.interrogate(image)
         elif mode == 'classic':
             return self.ci.interrogate_classic(image)
-        else:
+        elif mode == 'fast':
             return self.ci.interrogate_fast(image)
-        
+        elif mode == 'caption':
+            return self.ci.generate_caption(image)
+        else:
+            warnings.warn(f'Unsupported mode {mode}')
+            return ''
 
 if __name__ == "__main__":
     ic = ImageCaptioner()
