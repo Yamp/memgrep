@@ -1,14 +1,9 @@
---extra-index-url https://download.pytorch.org/whl/cu116
-
-clip-interrogator
 cython
-easyocr
 fire
 fuzzysearch
 loguru
 minio
 more-itertools
-numpy
 pycocotools
 pydantic
 pytesseract
@@ -19,3 +14,4 @@ requests
 salesforce-lavis
 telethon
 urllib3
+sqlalchemy
