@@ -72,7 +72,7 @@ class TgImage(Base):
     """
 
     __tablename__ = "tg_images"
-    image_id = mapped_column(String, primary_key=True)
+    image_id = mapped_column(Integer, primary_key=True)
     message_id = mapped_column(Integer, ForeignKey("tg_messages.id"))
     s3_url = mapped_column(String, nullable=True)
 
@@ -101,7 +101,7 @@ class Recognitions(Base):
     """
 
     __tablename__ = "recognitions"
-    image_id = mapped_column(String, ForeignKey("tg_images.image_id"), primary_key=True)
+    image_id = mapped_column(Integer, ForeignKey("tg_images.image_id"), primary_key=True)
 
     tesseract_rus = mapped_column(String, nullable=True)
     tesseract_eng = mapped_column(String, nullable=True)

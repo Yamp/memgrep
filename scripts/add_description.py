@@ -36,7 +36,7 @@ def main():
     ic = ImageCaptioner()
     for id, img in res.items():
         logger.info(f"Recognising image {id}...")
-        caption = recognise_image(str(id), img.data, ic)
+        caption = recognise_image(int(id), img.data, ic)
         logger.info(f"Caption: {caption}")
         pg.add_recognition(int(id), caption)
 

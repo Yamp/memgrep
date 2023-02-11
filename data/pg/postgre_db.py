@@ -216,11 +216,12 @@ class PostgresDB:
             ti = list(session.execute(select(TgImage)).scalars().all())
             return [t.image_id for t in ti]
 
+
     def add_recognition(self, img_id: int, recognition: str) -> None:
         """Add a recognition to the database."""
         with Session(self.engine) as session:
             try:
-                session.add(
+                session.merge(
                     Recognitions(
                         image_id=img_id,
                         blip=recognition,
