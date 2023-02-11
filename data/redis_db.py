@@ -233,8 +233,8 @@ class RedisDB:
                 "message_id": img.message_id,
                 "chat": img.message.chat.chat_id,
                 "post_link": img.message.post_link(),
-                "ocr_rus": rec.tesseract_rus,
-                "ocr_eng": rec.tesseract_eng,
+                # "ocr_rus": rec.tesseract_rus,
+                # "ocr_eng": rec.tesseract_eng,
                 "easy_ocr": rec.easy_ocr,
                 "blip": rec.blip,
             })
