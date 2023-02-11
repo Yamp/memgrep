@@ -45,7 +45,6 @@ rfc3986==1.5.0
 rsa==4.9
 s3transfer==0.6.0
 sacremoses==0.0.53
-scikit-image==0.19.3
 sentencepiece==0.1.97
 shapely==2.0.1
 six==1.16.0
@@ -60,3 +59,4 @@ typing_extensions==4.4.0
 urllib3==1.26.14
 wcwidth==0.2.6
 fire==0.5.0
+python-telegram-bot==20.1
