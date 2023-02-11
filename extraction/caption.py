@@ -52,7 +52,7 @@ class ImageCaptioner:
         try:
             import clip_interrogator as ci
         except ImportError:
-            warnings.warn("easyOCR is not installed.")
+            warnings.warn("clip_interrogator is not installed.")
             return False
         self.config = ci.Config(device=self.device, clip_model_name=model_name, chunk_size=chunk_size)
         self.ci = ci.Interrogator(self.config)
