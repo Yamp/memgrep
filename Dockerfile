@@ -1,18 +1,13 @@
-FROM python:3.11
+FROM python:3.10
 
 WORKDIR /var/www/memgrep
 
-RUN apt-get update && apt-get install -y tesseract-ocr tesseract-ocr-rus tesseract-ocr-eng
+RUN apt-get update && apt-get install -y libleptonica-dev tesseract-ocr libtesseract-dev python3-pil tesseract-ocr-rus  tesseract-ocr-eng tesseract-ocr-script-latn tesseract-ocr-script-cyrl
 
-SHELL ["/bin/bash", "-oeu", "pipefail", "-c"]
-RUN curl -sSL https://install.python-poetry.org | python3 -
+RUN curl -sSf https://sh.rustup.rs | sh
 
-ENV PATH=/root/.local/bin:$PATH
-RUN /root/.local/bin/poetry config virtualenvs.create false
-
-COPY poetry.lock pyproject.toml ./
-
-RUN  /root/.local/bin/poetry install --only main --no-interaction --no-ansi --no-cache
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
