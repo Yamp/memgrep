@@ -181,23 +181,10 @@ class RedisDB:
     def search(self, request: SearchRequest) -> list[ImageRecord]:
         """Search memes in the table.
 
-        Our request requires filtering messages by fields (if not None)
-        1. dt_start
-        2. dt_end
-        3. chats
-        4. senders
-
-        Fuzzy matching by fields
-        1. ocr_rus
-        2. ocr_eng
-        3. semantic_data
-
-        The results are sorted by the fuzzy match quality
+        Our request requires filtering messages by all text fields (now ocr, blip)
 
         """
-        res = self.redis.ft("tg_memes").search(Query(
-            f"@easy_ocr:{request.query} | @blip:{request.query}",
-        ))
+        res = self.redis.ft("tg_memes").search(Query(request.query))
 
         # res = self.redis.execute_command(
         #     "FT.SEARCH tg_memes\n"  # noqa
