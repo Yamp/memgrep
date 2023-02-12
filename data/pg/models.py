@@ -61,7 +61,7 @@ class TgMessage(Base):
                 f")>")
 
     def post_link(self):
-        return f"https://t.me/{self.chat.chat_name}/{self.id}"
+        return f"https://t.me/{self.chat.chat_name}/{self.message_id}"
 
 
 class TgImage(Base):
