@@ -231,7 +231,7 @@ class RedisDB:
             self.redis.hset(f"doc:{rec.image_id}", mapping={
                 "message_id": img.message_id,
                 "chat": img.message.chat.chat_id,
-                "post_link": img.message.post_link(),
+                "post_link": f"https://t.me/{img.message.chat.name}/{img.message_id}",
                 # "ocr_rus": rec.tesseract_rus,
                 # "ocr_eng": rec.tesseract_eng,
                 "easy_ocr": rec.easy_ocr,
