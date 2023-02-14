@@ -69,3 +69,20 @@ class DataStorage:
     # def get_unrecognized_images(self) -> list[PImage]:
     #     """Get image from the storage."""
     #     return self.index.get_unrecognized_images()
+
+
+def get_default_storage(enable_redis: bool = False):
+    logger.info("Initializing s3...")
+    s3 = S3DB()
+    
+    redis = None
+    if enable_redis:
+        logger.info("Initializing redis...")
+        redis = RedisDB()
+    
+    logger.info("Initializing postgres...")
+    pg = PostgresDB()
+
+    logger.info("Creating storage...")
+    storage = DataStorage(s3, redis, pg)
+    return storage
