@@ -7,6 +7,10 @@ This script checks both Telethon client and Python Telegram Bot functionality.
 import os
 import sys
 from pathlib import Path
+import dotenv
+
+# Load environment variables from .env.test file
+dotenv.load_dotenv(".env.test")
 
 # Add the project root to the Python path
 sys.path.extend([".", "..", "../.."])

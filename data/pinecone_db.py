@@ -50,18 +50,18 @@ class PineconeDB:
         if api_key and environment:
             try:
                 import pinecone
-                pinecone.init(api_key=api_key, environment=environment)
+                pc = pinecone.Pinecone(api_key=api_key, environment=environment)
                 
                 # Check if index exists, create it if it doesn't
-                if index_name not in pinecone.list_indexes():
-                    pinecone.create_index(
+                if index_name not in pc.list_indexes().names():
+                    pc.create_index(
                         name=index_name,
                         dimension=dimension,
                         metric="cosine",
                     )
                     logger.info(f"Created Pinecone index '{index_name}'")
                 
-                self.index = pinecone.Index(index_name)
+                self.index = pc.Index(index_name)
                 logger.info(f"Connected to Pinecone index '{index_name}'")
             except ImportError:
                 logger.error("Failed to import Pinecone. Please install it with 'pip install pinecone-client'")
@@ -81,21 +81,21 @@ class PineconeDB:
         
         try:
             import pinecone
-            pinecone.init(api_key=self.api_key, environment=self.environment)
+            pc = pinecone.Pinecone(api_key=self.api_key, environment=self.environment)
             
             # Check if index exists
-            if self.index_name in pinecone.list_indexes():
+            if self.index_name in pc.list_indexes().names():
                 logger.info(f"Pinecone index '{self.index_name}' already exists")
                 return False
             
             # Create index
-            pinecone.create_index(
+            pc.create_index(
                 name=self.index_name,
                 dimension=self.dimension,
                 metric="cosine",
             )
             
-            self.index = pinecone.Index(self.index_name)
+            self.index = pc.Index(self.index_name)
             logger.info(f"Created Pinecone index '{self.index_name}'")
             return True
         except Exception as e:

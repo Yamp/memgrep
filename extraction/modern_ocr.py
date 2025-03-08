@@ -55,8 +55,8 @@ class ModernOCRExtractor:
                 api_key = os.environ.get("GOOGLE_API_KEY")
                 if api_key:
                     genai.configure(api_key=api_key)
-                    self.gemini_client = genai.GenerativeModel('gemini-pro-vision')
-                    logger.info("Gemini Pro Vision client initialized successfully.")
+                    self.gemini_client = genai.GenerativeModel('gemini-1.5-flash')
+                    logger.info("Gemini 1.5 Flash client initialized successfully.")
                 else:
                     logger.warning("GOOGLE_API_KEY not found in environment variables.")
                     logger.warning("Will fall back to base OCR extractor or Vision API.")
