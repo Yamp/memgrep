@@ -1,0 +1,46 @@
+# Core dependencies
+boto3>=1.26.69
+fire>=0.5.0
+loguru>=0.6.0
+more-itertools>=9.0.0
+Pillow>=9.4.0
+psycopg2-binary>=2.9.5
+pydantic>=2.0.0
+python-environ>=0.4.54
+python-telegram-bot>=20.1
+redis>=4.5.1
+SQLAlchemy>=2.0.3
+Telethon>=1.27.0
+minio>=7.1.0
+fuzzysearch>=0.7.3
+requests>=2.31.0
+alembic>=1.9.3
+cryptg>=0.4.0
+
+# Computer vision dependencies
+blip-vit>=0.0.3
+clip-interrogator>=0.4.3
+Cython>=0.29.33
+easyocr>=1.6.2
+matplotlib>=3.6.3
+numpy>=1.24.2
+open-clip-torch>=2.12.0
+opencv-python-headless>=4.5.4.60
+pycocoevalcap>=1.2
+pycocotools>=2.0.6
+PyWavelets>=1.4.1
+scikit-image>=0.19.3
+scipy>=1.10.0
+tokenizers>=0.10.3
+torch>=1.13.1
+torchvision>=0.14.1
+transformers>=4.15.0
+pytesseract>=0.3.10
+pyenchant>=3.2.2
+
+# Development dependencies
+pytest>=7.0.0
+pytest-cov>=4.0.0
+black>=23.0.0
+ruff>=0.0.270
+mypy>=1.0.0

@@ -1,0 +1,61 @@
+FROM python:3.10-slim as base
+
+# Set working directory
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    libleptonica-dev \
+    tesseract-ocr \
+    libtesseract-dev \
+    python3-pil \
+    tesseract-ocr-rus \
+    tesseract-ocr-eng \
+    tesseract-ocr-script-latn \
+    tesseract-ocr-script-cyrl \
+    curl \
+    build-essential \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Rust (needed for some Python packages)
+RUN curl https://sh.rustup.rs -sSf | bash -s -- -y
+ENV PATH="/root/.cargo/bin:${PATH}"
+
+# Install UV package manager
+RUN curl -sSf https://astral.sh/uv/install.sh | sh
+ENV PATH="/root/.cargo/bin:${PATH}"
+
+# Copy requirements file
+COPY requirements-uv.txt .
+
+# Install Python dependencies
+RUN uv pip install --system -r requirements-uv.txt
+
+# Copy application code
+COPY . .
+
+# Create necessary directories
+RUN mkdir -p /app/data/images /app/data/tmp
+
+# Set environment variables
+ENV PYTHONPATH=/app
+ENV TMP_DIR=/app/data/tmp
+
+# Expose ports
+EXPOSE 5000
+
+# Default command
+CMD ["python", "scripts/start_api.py"]
+
+# Build a smaller image for production
+FROM base as prod
+
+# Remove development dependencies
+RUN pip uninstall -y pytest pytest-cov black ruff mypy
+
+# Set production environment
+ENV DEBUG=0
+
+# Default command for production
+CMD ["python", "scripts/start_api.py"]
