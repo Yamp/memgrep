@@ -16,6 +16,9 @@ fuzzysearch>=0.7.3
 requests>=2.31.0
 alembic>=1.9.3
 cryptg>=0.4.0
+pinecone-client>=2.2.1
+google-cloud-vision>=3.4.0
+google-generativeai>=0.3.0
 
 # Computer vision dependencies
 blip-vit>=0.0.3
